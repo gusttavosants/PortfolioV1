@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,25 +9,32 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, Trash2, Award, Folder } from "lucide-react";
-import { Certificate, Project } from "@/types/portfolio";
+import { ArrowLeft, Plus, Trash2, Award, Folder, LogOut, Briefcase, FileText } from "lucide-react";
+import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
 
 const Admin = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const {
     certificates,
     projects,
+    experiences,
     isLoading,
     addCertificate,
     removeCertificate,
     addProject,
     removeProject,
+    addExperience,
+    removeExperience,
+    texts,
+    updateTexts,
   } = usePortfolioData();
 
   const [newCertificate, setNewCertificate] = useState<Omit<Certificate, "id">>({
     title: "",
     issuer: "",
     date: "",
+    location: "",
     credentialUrl: "",
     image: "",
   });
@@ -41,13 +49,23 @@ const Admin = () => {
 
   const [techInput, setTechInput] = useState("");
 
+  const [editableTexts, setEditableTexts] = useState<TextContent>(texts);
+
+  const [newExperience, setNewExperience] = useState<Omit<Experience, "id">>({
+    title: "",
+    company: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+  });
+
   const handleAddCertificate = () => {
     if (!newCertificate.title || !newCertificate.issuer) {
       toast.error("Preencha título e emissor do certificado");
       return;
     }
     addCertificate(newCertificate);
-    setNewCertificate({ title: "", issuer: "", date: "", credentialUrl: "", image: "" });
+    setNewCertificate({ title: "", issuer: "", date: "", location: "", credentialUrl: "", image: "" });
     toast.success("Certificado adicionado!");
   };
 
@@ -60,6 +78,31 @@ const Admin = () => {
     setNewProject({ title: "", description: "", technologies: [], githubUrl: "", liveUrl: null });
     setTechInput("");
     toast.success("Projeto adicionado!");
+  };
+
+  const handleAddExperience = () => {
+    if (!newExperience.title || !newExperience.company || !newExperience.startDate) {
+      toast.error("Preencha pelo menos cargo, empresa e data de início.");
+      return;
+    }
+    addExperience(newExperience);
+    setNewExperience({ title: "", company: "", startDate: "", endDate: "", description: "" });
+    toast.success("Experiência adicionada!");
+  };
+
+  const handleTextChange = (section: 'hero' | 'about', field: string, value: string) => {
+    setEditableTexts(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value,
+      }
+    }));
+  };
+
+  const handleSaveTexts = () => {
+    updateTexts(editableTexts);
+    toast.success("Textos atualizados com sucesso!");
   };
 
   const handleAddTech = () => {
@@ -98,7 +141,7 @@ const Admin = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center justify-between gap-4 mb-8">
               <Button
                 variant="ghost"
                 size="icon"
@@ -110,13 +153,17 @@ const Admin = () => {
               <div>
                 <h1 className="text-2xl font-bold">Painel Admin</h1>
                 <p className="text-muted-foreground text-sm">
-                  Gerencie seus certificados e projetos
+                  Gerencie o conteúdo do seu portfólio
                 </p>
               </div>
             </div>
+            <Button variant="outline" size="sm" onClick={logout} className="gap-2">
+              <LogOut className="w-4 h-4" />
+              Sair
+            </Button>
 
             <Tabs defaultValue="certificates" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="certificates" className="gap-2">
                   <Award className="w-4 h-4" />
                   Certificados ({certificates.length})
@@ -124,6 +171,14 @@ const Admin = () => {
                 <TabsTrigger value="projects" className="gap-2">
                   <Folder className="w-4 h-4" />
                   Projetos ({projects.length})
+                </TabsTrigger>
+                <TabsTrigger value="experiences" className="gap-2">
+                  <Briefcase className="w-4 h-4" />
+                  Experiências ({experiences.length})
+                </TabsTrigger>
+                <TabsTrigger value="texts" className="gap-2">
+                  <FileText className="w-4 h-4" />
+                  Textos
                 </TabsTrigger>
               </TabsList>
 
@@ -155,6 +210,13 @@ const Admin = () => {
                         value={newCertificate.date}
                         onChange={(e) =>
                           setNewCertificate((prev) => ({ ...prev, date: e.target.value }))
+                        }
+                      />
+                      <Input
+                        placeholder="Local (ex: Alura, Udemy)"
+                        value={newCertificate.location}
+                        onChange={(e) =>
+                          setNewCertificate((prev) => ({ ...prev, location: e.target.value }))
                         }
                       />
                       <Input
@@ -195,7 +257,7 @@ const Admin = () => {
                           <div className="min-w-0">
                             <h3 className="font-medium truncate">{cert.title}</h3>
                             <p className="text-sm text-muted-foreground truncate">
-                              {cert.issuer} • {cert.date}
+                              {cert.issuer} • {cert.location} • {cert.date}
                             </p>
                           </div>
                         </div>
@@ -338,6 +400,130 @@ const Admin = () => {
                   ))}
                 </div>
               </TabsContent>
+
+              {/* Experiences Tab */}
+              <TabsContent value="experiences" className="space-y-6">
+                {/* Add Experience Form */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Adicionar Experiência</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <Input
+                        placeholder="Cargo"
+                        value={newExperience.title}
+                        onChange={(e) => setNewExperience((prev) => ({ ...prev, title: e.target.value }))}
+                      />
+                      <Input
+                        placeholder="Empresa"
+                        value={newExperience.company}
+                        onChange={(e) => setNewExperience((prev) => ({ ...prev, company: e.target.value }))}
+                      />
+                      <Input
+                        placeholder="Data de Início (ex: Jan 2022)"
+                        value={newExperience.startDate}
+                        onChange={(e) => setNewExperience((prev) => ({ ...prev, startDate: e.target.value }))}
+                      />
+                      <Input
+                        placeholder="Data de Término (ou 'Atual')"
+                        value={newExperience.endDate || ''}
+                        onChange={(e) => setNewExperience((prev) => ({ ...prev, endDate: e.target.value || null }))}
+                      />
+                    </div>
+                    <Textarea
+                      placeholder="Descrição das atividades"
+                      value={newExperience.description}
+                      onChange={(e) => setNewExperience((prev) => ({ ...prev, description: e.target.value }))}
+                    />
+                    <Button onClick={handleAddExperience} className="w-full gap-2">
+                      <Plus className="w-4 h-4" />
+                      Adicionar Experiência
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Experiences List */}
+                <div className="space-y-3">
+                  {experiences.map((exp) => (
+                    <Card key={exp.id}>
+                      <CardContent className="p-4 flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-medium">{exp.title}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {exp.company} • {exp.startDate} - {exp.endDate || 'Atual'}
+                          </p>
+                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                            {exp.description}
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            removeExperience(exp.id);
+                            toast.success("Experiência removida");
+                          }}
+                          className="shrink-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Texts Tab */}
+              <TabsContent value="texts" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Editar Textos da Página</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-4 rounded-md border p-4">
+                      <h3 className="font-medium">Seção Hero</h3>
+                      <Input
+                        placeholder="Título Principal"
+                        value={editableTexts.hero.title}
+                        onChange={(e) => handleTextChange('hero', 'title', e.target.value)}
+                      />
+                      <Textarea
+                        placeholder="Subtítulo"
+                        value={editableTexts.hero.subtitle}
+                        onChange={(e) => handleTextChange('hero', 'subtitle', e.target.value)}
+                      />
+                       <Input
+                        placeholder="Texto do Botão (CTA)"
+                        value={editableTexts.hero.cta}
+                        onChange={(e) => handleTextChange('hero', 'cta', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-4 rounded-md border p-4">
+                      <h3 className="font-medium">Seção Sobre</h3>
+                       <Input
+                        placeholder="Título da Seção Sobre"
+                        value={editableTexts.about.title}
+                        onChange={(e) => handleTextChange('about', 'title', e.target.value)}
+                      />
+                      <Textarea
+                        placeholder="Primeiro Parágrafo"
+                        value={editableTexts.about.paragraph1}
+                        onChange={(e) => handleTextChange('about', 'paragraph1', e.target.value)}
+                      />
+                      <Textarea
+                        placeholder="Segundo Parágrafo"
+                        value={editableTexts.about.paragraph2}
+                        onChange={(e) => handleTextChange('about', 'paragraph2', e.target.value)}
+                      />
+                    </div>
+
+                    <Button onClick={handleSaveTexts} className="w-full">Salvar Textos</Button>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
             </Tabs>
           </div>
         </div>

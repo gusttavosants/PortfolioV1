@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Certificate, Project } from "@/types/portfolio";
+import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
 
 const DEFAULT_CERTIFICATES: Certificate[] = [
   {
@@ -7,6 +7,7 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     title: "AWS Certified Developer",
     issuer: "Amazon Web Services",
     date: "2024",
+    location: "Online",
     credentialUrl: "#",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=250&fit=crop",
   },
@@ -15,6 +16,7 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     title: "Docker Certified Associate",
     issuer: "Docker Inc.",
     date: "2024",
+    location: "Online",
     credentialUrl: "#",
     image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=400&h=250&fit=crop",
   },
@@ -23,6 +25,7 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     title: "PostgreSQL Administration",
     issuer: "PostgreSQL",
     date: "2023",
+    location: "Online",
     credentialUrl: "#",
     image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=400&h=250&fit=crop",
   },
@@ -31,6 +34,7 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     title: "Node.js Application Developer",
     issuer: "OpenJS Foundation",
     date: "2023",
+    location: "Online",
     credentialUrl: "#",
     image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
   },
@@ -39,6 +43,7 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     title: "Python Professional Certificate",
     issuer: "Python Institute",
     date: "2023",
+    location: "Online",
     credentialUrl: "#",
     image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400&h=250&fit=crop",
   },
@@ -47,10 +52,43 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     title: "Kubernetes Administrator",
     issuer: "CNCF",
     date: "2022",
+    location: "Online",
     credentialUrl: "#",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=250&fit=crop",
   },
 ];
+
+const DEFAULT_EXPERIENCES: Experience[] = [
+  {
+    id: "1",
+    title: "Desenvolvedor Backend",
+    company: "Tech Solutions",
+    startDate: "Jan 2022",
+    endDate: "Atual",
+    description: "Desenvolvimento e manutenção de APIs RESTful para clientes de grande porte, utilizando Node.js, TypeScript e PostgreSQL. Responsável pela arquitetura de microserviços e deploy em ambiente AWS."
+  },
+  {
+    id: "2",
+    title: "Desenvolvedor Jr.",
+    company: "Inova Web",
+    startDate: "Fev 2021",
+    endDate: "Dez 2021",
+    description: "Atuei no desenvolvimento de aplicações web full-stack com React e Python (Django). Colaborei em projetos ágeis, participando de todo o ciclo de vida do software."
+  }
+];
+
+const DEFAULT_TEXTS: TextContent = {
+  hero: {
+    title: "Desenvolvedor Backend",
+    subtitle: "Especialista em construir APIs robustas, escaláveis e seguras. Transformo desafios complexos em soluções de software eficientes.",
+    cta: "Entre em contato",
+  },
+  about: {
+    title: "Sobre mim",
+    paragraph1: "Com mais de 5 anos de experiência no desenvolvimento de software, meu foco é a criação de backends performáticos e confiáveis. Tenho um profundo conhecimento em arquiteturas de microserviços, design de APIs (REST e gRPC) e na otimização de bancos de dados relacionais e NoSQL.",
+    paragraph2: "Sou apaixonado por resolver problemas e estou sempre em busca de aprender novas tecnologias para aprimorar minhas habilidades. Acredito que a colaboração e a comunicação são fundamentais para o sucesso de qualquer projeto.",
+  },
+};
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -106,16 +144,22 @@ const DEFAULT_PROJECTS: Project[] = [
 const STORAGE_KEYS = {
   certificates: "portfolio_certificates",
   projects: "portfolio_projects",
+  experiences: "portfolio_experiences",
+  texts: "portfolio_texts",
 };
 
 export const usePortfolioData = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [texts, setTexts] = useState<TextContent>(DEFAULT_TEXTS);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedCertificates = localStorage.getItem(STORAGE_KEYS.certificates);
     const storedProjects = localStorage.getItem(STORAGE_KEYS.projects);
+    const storedExperiences = localStorage.getItem(STORAGE_KEYS.experiences);
+    const storedTexts = localStorage.getItem(STORAGE_KEYS.texts);
 
     setCertificates(
       storedCertificates ? JSON.parse(storedCertificates) : DEFAULT_CERTIFICATES
@@ -123,6 +167,10 @@ export const usePortfolioData = () => {
     setProjects(
       storedProjects ? JSON.parse(storedProjects) : DEFAULT_PROJECTS
     );
+    setExperiences(
+      storedExperiences ? JSON.parse(storedExperiences) : DEFAULT_EXPERIENCES
+    );
+    setTexts(storedTexts ? JSON.parse(storedTexts) : DEFAULT_TEXTS);
     setIsLoading(false);
   }, []);
 
@@ -134,6 +182,16 @@ export const usePortfolioData = () => {
   const saveProjects = (newProjects: Project[]) => {
     setProjects(newProjects);
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(newProjects));
+  };
+
+  const saveExperiences = (newExperiences: Experience[]) => {
+    setExperiences(newExperiences);
+    localStorage.setItem(STORAGE_KEYS.experiences, JSON.stringify(newExperiences));
+  };
+
+  const saveTexts = (newTexts: TextContent) => {
+    setTexts(newTexts);
+    localStorage.setItem(STORAGE_KEYS.texts, JSON.stringify(newTexts));
   };
 
   const addCertificate = (certificate: Omit<Certificate, "id">) => {
@@ -176,5 +234,26 @@ export const usePortfolioData = () => {
     addProject,
     removeProject,
     updateProject,
+
+    // Texts
+    texts,
+    updateTexts: (newTexts: TextContent) => {
+      saveTexts(newTexts);
+    },
+
+    // Experiences
+    experiences,
+    addExperience: (experience: Omit<Experience, "id">) => {
+      const newExperience = { ...experience, id: crypto.randomUUID() };
+      saveExperiences([...experiences, newExperience]);
+    },
+    removeExperience: (id: string) => {
+      saveExperiences(experiences.filter((e) => e.id !== id));
+    },
+    updateExperience: (id: string, experience: Omit<Experience, "id">) => {
+      saveExperiences(
+        experiences.map((e) => (e.id === id ? { ...experience, id } : e))
+      );
+    },
   };
 };

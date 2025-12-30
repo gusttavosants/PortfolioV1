@@ -1,6 +1,8 @@
 import { Github, Linkedin, Mail, ChevronDown } from "lucide-react";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 const HeroSection = () => {
+  const { texts } = usePortfolioData();
   return (
     <section
       id="home"
@@ -23,12 +25,11 @@ const HeroSection = () => {
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-up" style={{ animationDelay: "0.2s" }}>
             Olá, eu sou{" "}
-            <span className="text-gradient">Desenvolvedor Backend</span>
+            <span className="text-gradient">{texts.hero.title}</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: "0.3s" }}>
-            Construindo sistemas robustos, escaláveis e eficientes. 
-            Especializado em APIs, bancos de dados e arquitetura de software.
+            {texts.hero.subtitle}
           </p>
 
           {/* Tech Stack */}
@@ -64,7 +65,7 @@ const HeroSection = () => {
               <Linkedin className="w-5 h-5" />
             </a>
             <a
-              href="mailto:seu@email.com"
+              href="mailto:gustavoluizsantosmelo@gmail.com"
               className="p-3 rounded-lg bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-all hover:glow"
               aria-label="Email"
             >
