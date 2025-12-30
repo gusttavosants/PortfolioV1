@@ -1,5 +1,6 @@
 import { Code2, Database, Server, Cloud } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 const skills = [
   {
@@ -25,6 +26,7 @@ const skills = [
 ];
 
 const AboutSection = () => {
+  const { texts } = usePortfolioData();
   return (
     <section id="about" className="py-20 md:py-32">
       <div className="container mx-auto px-4">
@@ -36,7 +38,7 @@ const AboutSection = () => {
                 // sobre mim
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Quem sou eu<span className="text-primary">?</span>
+                {texts.about.title}<span className="text-primary">.</span>
               </h2>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
@@ -47,14 +49,10 @@ const AboutSection = () => {
             <AnimatedSection delay={100}>
               <div className="space-y-6">
                 <p className="text-muted-foreground leading-relaxed">
-                  Sou um desenvolvedor backend apaixonado por criar soluções que fazem a diferença. 
-                  Com experiência em diversas tecnologias e linguagens de programação, 
-                  meu foco é desenvolver sistemas robustos e escaláveis.
+                  {texts.about.paragraph1}
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Acredito que um bom código backend é invisível para o usuário final, 
-                  mas é a base que sustenta toda a experiência. Minha missão é construir 
-                  essa base com excelência, seguindo as melhores práticas do mercado.
+                  {texts.about.paragraph2}
                 </p>
                 
                 {/* Stats */}
@@ -94,7 +92,7 @@ const AboutSection = () => {
                       {"  "}
                       <span className="text-foreground">name</span>
                       <span className="text-primary">:</span>{" "}
-                      <span className="text-primary">"Seu Nome"</span>,
+                      <span className="text-primary">"Gustavo Melo"</span>,
                       {"\n"}
                       {"  "}
                       <span className="text-foreground">role</span>

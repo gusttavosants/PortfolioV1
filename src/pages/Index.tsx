@@ -4,10 +4,14 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import CertificatesSection from "@/components/CertificatesSection";
 import ProjectsSection from "@/components/ProjectsSection";
+import { useLocation } from "react-router-dom";
 import ContactSection from "@/components/ContactSection";
+import ExperienceSection from "@/components/ExperienceSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  const location = useLocation();
+  const showCv = new URLSearchParams(location.search).get("cv") === "true";
   return (
     <>
       <Helmet>
@@ -30,6 +34,7 @@ const Index = () => {
           <CertificatesSection />
           <ProjectsSection />
           <ContactSection />
+          {showCv && <ExperienceSection />}
         </main>
         <Footer />
       </div>
