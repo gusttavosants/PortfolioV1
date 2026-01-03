@@ -6,6 +6,7 @@ export interface Certificate {
   location: string;
   credentialUrl: string;
   image: string;
+  pdfFile?: string; // base64 encoded PDF
 }
 
 export interface TextContent {

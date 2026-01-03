@@ -7,14 +7,14 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "seu@email.com",
-    href: "mailto:seu@email.com",
+    value: "gustavoluizsantosmelo@gmail.com",
+    href: "mailto:gustavoluizsantosmelo@gmail.com",
   },
   {
     icon: Phone,
     label: "Telefone",
-    value: "+55 (11) 99999-9999",
-    href: "tel:+5511999999999",
+    value: "+55 (12) 93585-4861",
+    href: "tel:+5512935854861",
   },
   {
     icon: MapPin,
@@ -28,12 +28,12 @@ const socialLinks = [
   {
     icon: Github,
     label: "GitHub",
-    href: "https://github.com",
+    href: "https://github.com/gusttavosants",
   },
   {
     icon: Linkedin,
     label: "LinkedIn",
-    href: "https://linkedin.com",
+    href: "https://www.linkedin.com/in/gustsants/",
   },
 ];
 
