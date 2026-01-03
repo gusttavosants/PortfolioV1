@@ -6,22 +6,22 @@ const skills = [
   {
     icon: Server,
     title: "APIs & Microservices",
-    description: "Desenvolvimento de APIs RESTful e GraphQL com foco em performance e segurança.",
+    description: "Desenvolvimento de APIs RESTful com Python (FastAPI, Flask) e Node.js (NestJS), focando em arquitetura escalável e performance.",
   },
   {
     icon: Database,
     title: "Bancos de Dados",
-    description: "Modelagem e otimização de bancos SQL e NoSQL para alta disponibilidade.",
+    description: "Modelagem e otimização de bancos SQL (PostgreSQL, MySQL) e NoSQL (MongoDB), com aplicação de Arquitetura RAG.",
   },
   {
     icon: Cloud,
     title: "Cloud & DevOps",
-    description: "Infraestrutura em nuvem, CI/CD, containers e orquestração.",
+    description: "Experiência com AWS, Azure e Supabase, combinando desenvolvimento com conhecimento em infraestrutura e suporte técnico.",
   },
   {
     icon: Code2,
     title: "Arquitetura",
-    description: "Design de sistemas distribuídos, padrões de projeto e clean code.",
+    description: "Design de sistemas backend, padrões de projeto e clean code, com foco em soluções robustas e escaláveis.",
   },
 ];
 
@@ -58,15 +58,15 @@ const AboutSection = () => {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-4 pt-6">
                   <div className="text-center p-4 rounded-lg bg-secondary/30 border border-border">
-                    <span className="text-2xl md:text-3xl font-bold text-primary block">3+</span>
-                    <span className="text-sm text-muted-foreground">Anos de Exp.</span>
+                    <span className="text-2xl md:text-3xl font-bold text-primary block">1+</span>
+                    <span className="text-sm text-muted-foreground">Ano de Estudo</span>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-secondary/30 border border-border">
-                    <span className="text-2xl md:text-3xl font-bold text-primary block">20+</span>
+                    <span className="text-2xl md:text-3xl font-bold text-primary block">5+</span>
                     <span className="text-sm text-muted-foreground">Projetos</span>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-secondary/30 border border-border">
-                    <span className="text-2xl md:text-3xl font-bold text-primary block">10+</span>
+                    <span className="text-2xl md:text-3xl font-bold text-primary block">3+</span>
                     <span className="text-sm text-muted-foreground">Certificados</span>
                   </div>
                 </div>
@@ -104,15 +104,14 @@ const AboutSection = () => {
                       <span className="text-primary">:</span> [
                       <span className="text-primary">"TS"</span>,{" "}
                       <span className="text-primary">"Python"</span>,{" "}
-                      <span className="text-primary">"Java"</span>],
+                      <span className="text-primary">"Node.js"</span>],
                       {"\n"}
                       {"  "}
                       <span className="text-foreground">available</span>
                       <span className="text-primary">:</span>{" "}
                       <span className="text-blue-400">true</span>
                       {"\n"}
-                      {"}"};
-                    </code>
+                      {"}"};</code>
                   </pre>
                 </div>
               </div>

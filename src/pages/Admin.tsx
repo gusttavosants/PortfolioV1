@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, Trash2, Award, Folder, LogOut, Briefcase, FileText } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Award, Folder, LogOut, Briefcase, FileText, Edit } from "lucide-react";
 import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
 
 const Admin = () => {
@@ -22,6 +23,7 @@ const Admin = () => {
     isLoading,
     addCertificate,
     removeCertificate,
+    updateCertificate,
     addProject,
     removeProject,
     addExperience,
@@ -58,6 +60,9 @@ const Admin = () => {
     endDate: "",
     description: "",
   });
+
+  const [editingCertificate, setEditingCertificate] = useState<Certificate | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleAddCertificate = () => {
     if (!newCertificate.title || !newCertificate.issuer) {
@@ -120,6 +125,30 @@ const Admin = () => {
       ...prev,
       technologies: prev.technologies.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleEditCertificate = (certificate: Certificate) => {
+    setEditingCertificate(certificate);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveCertificateEdit = () => {
+    if (!editingCertificate) return;
+
+    if (!editingCertificate.title || !editingCertificate.issuer) {
+      toast.error("Preencha título e emissor do certificado");
+      return;
+    }
+
+    updateCertificate(editingCertificate.id, editingCertificate);
+    setIsEditModalOpen(false);
+    setEditingCertificate(null);
+    toast.success("Certificado atualizado!");
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditModalOpen(false);
+    setEditingCertificate(null);
   };
 
   if (isLoading) {
@@ -261,21 +290,108 @@ const Admin = () => {
                             </p>
                           </div>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            removeCertificate(cert.id);
-                            toast.success("Certificado removido");
-                          }}
-                          className="shrink-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex gap-2 shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditCertificate(cert)}
+                            className="text-primary hover:text-primary"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              removeCertificate(cert.id);
+                              toast.success("Certificado removido");
+                            }}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
                 </div>
+
+                {/* Edit Certificate Modal */}
+                <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>Editar Certificado</DialogTitle>
+                    </DialogHeader>
+                    {editingCertificate && (
+                      <div className="space-y-4">
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <Input
+                            placeholder="Título do certificado"
+                            value={editingCertificate.title}
+                            onChange={(e) =>
+                              setEditingCertificate((prev) =>
+                                prev ? { ...prev, title: e.target.value } : null
+                              )
+                            }
+                          />
+                          <Input
+                            placeholder="Emissor"
+                            value={editingCertificate.issuer}
+                            onChange={(e) =>
+                              setEditingCertificate((prev) =>
+                                prev ? { ...prev, issuer: e.target.value } : null
+                              )
+                            }
+                          />
+                          <Input
+                            placeholder="Data (ex: 2024)"
+                            value={editingCertificate.date}
+                            onChange={(e) =>
+                              setEditingCertificate((prev) =>
+                                prev ? { ...prev, date: e.target.value } : null
+                              )
+                            }
+                          />
+                          <Input
+                            placeholder="Local (ex: Alura, Udemy)"
+                            value={editingCertificate.location}
+                            onChange={(e) =>
+                              setEditingCertificate((prev) =>
+                                prev ? { ...prev, location: e.target.value } : null
+                              )
+                            }
+                          />
+                          <Input
+                            placeholder="URL da credencial"
+                            value={editingCertificate.credentialUrl}
+                            onChange={(e) =>
+                              setEditingCertificate((prev) =>
+                                prev ? { ...prev, credentialUrl: e.target.value } : null
+                              )
+                            }
+                          />
+                        </div>
+                        <Input
+                          placeholder="URL da imagem"
+                          value={editingCertificate.image}
+                          onChange={(e) =>
+                            setEditingCertificate((prev) =>
+                              prev ? { ...prev, image: e.target.value } : null
+                            )
+                          }
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="outline" onClick={handleCancelEdit}>
+                            Cancelar
+                          </Button>
+                          <Button onClick={handleSaveCertificateEdit}>
+                            Salvar Alterações
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </TabsContent>
 
               {/* Projects Tab */}
