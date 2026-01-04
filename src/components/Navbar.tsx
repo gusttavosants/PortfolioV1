@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Terminal } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navItems = [
   { label: "Início", href: "#home" },
@@ -37,20 +37,30 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-foreground p-2"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+
+          {/* Logo - Centered */}
           <a
             href="#home"
-            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1 text-foreground hover:text-primary transition-colors"
             onClick={(e) => {
               e.preventDefault();
               scrollToSection("#home");
             }}
           >
-            <Terminal className="w-6 h-6 text-primary" />
-            <span className="font-mono font-semibold text-lg">dev.backend</span>
+            <span className="font-bold text-lg">Gustavo</span>
+            <span className="font-bold text-lg text-primary">Melo</span>
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8 ml-auto">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -66,14 +76,8 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-foreground p-2"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Spacer for mobile */}
+          <div className="md:hidden w-10" />
         </div>
 
         {/* Mobile Navigation */}
