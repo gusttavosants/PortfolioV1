@@ -34,7 +34,7 @@ const CertificatesSection = () => {
 
   if (isLoading) {
     return (
-      <section id="certificates" className="py-20 md:py-32 bg-secondary/20">
+      <section id="certificates" className="py-20 md:py-32 bg-card/50">
         <div className="container mx-auto px-4 text-center">
           <div className="text-muted-foreground">Carregando certificados...</div>
         </div>
@@ -44,17 +44,17 @@ const CertificatesSection = () => {
 
   return (
     <>
-      <section id="certificates" className="py-20 md:py-32 bg-secondary/20">
+      <section id="certificates" className="py-20 md:py-32 bg-card/50 relative">
+        {/* Background decoration */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             {/* Section Header */}
             <AnimatedSection>
               <div className="text-center mb-16">
-                <span className="font-mono text-sm text-primary mb-4 block">
-                  // certificações
-                </span>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Certificados<span className="text-primary">.</span>
+                  Certificados
                 </h2>
                 <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
                 <p className="text-muted-foreground mt-6 max-w-2xl mx-auto">
@@ -68,15 +68,15 @@ const CertificatesSection = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {certificates.map((cert, index) => (
                 <AnimatedSection key={cert.id} delay={index * 100}>
-                  <div className="group rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:glow h-full">
+                  <div className="group rounded-xl overflow-hidden bg-background border border-border hover:border-primary/50 transition-all duration-300 h-full">
                     {/* Certificate Image */}
-                    <div className="relative h-40 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden">
                       <img
                         src={cert.image}
                         alt={cert.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
                       <div className="absolute top-4 right-4">
                         <div className="p-2 rounded-lg bg-primary/20 backdrop-blur-sm">
                           <Award className="w-5 h-5 text-primary" />
@@ -93,22 +93,20 @@ const CertificatesSection = () => {
                         {cert.issuer}
                       </p>
 
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4" />
-                          <span>{cert.date}</span>
-                        </div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                        <Calendar className="w-4 h-4" />
+                        <span>{cert.date}</span>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-4">
                         {cert.pdfFile && (
                           <button
                             onClick={() => handleViewPdf(cert.pdfFile!, cert.title)}
                             className="flex items-center gap-1 text-sm text-primary hover:underline"
                           >
-                            <FileText className="w-3 h-3" />
-                            <span>Visualizar PDF</span>
+                            <FileText className="w-4 h-4" />
+                            <span>PDF</span>
                           </button>
                         )}
                         <a
@@ -118,7 +116,7 @@ const CertificatesSection = () => {
                           className="flex items-center gap-1 text-sm text-primary hover:underline ml-auto"
                         >
                           <span>Ver credencial</span>
-                          <ExternalLink className="w-3 h-3" />
+                          <ExternalLink className="w-4 h-4" />
                         </a>
                       </div>
                     </div>

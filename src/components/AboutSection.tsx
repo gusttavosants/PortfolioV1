@@ -27,108 +27,96 @@ const skills = [
 
 const AboutSection = () => {
   const { texts } = usePortfolioData();
+  
   return (
-    <section id="about" className="py-20 md:py-32">
+    <section id="about" className="py-20 md:py-32 relative">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <AnimatedSection>
             <div className="text-center mb-16">
-              <span className="font-mono text-sm text-primary mb-4 block">
-                // sobre mim
-              </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {texts.about.title}<span className="text-primary">.</span>
+                Sobre mim
               </h2>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
           </AnimatedSection>
 
           {/* About Content */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-start mb-20">
+            {/* Profile Image */}
             <AnimatedSection delay={100}>
+              <div className="relative">
+                <div className="aspect-square max-w-md mx-auto rounded-2xl overflow-hidden border border-border bg-card">
+                  <div className="w-full h-full bg-secondary flex items-center justify-center">
+                    <span className="text-8xl text-primary/30">👨‍💻</span>
+                  </div>
+                </div>
+                
+                {/* Decorative elements */}
+                <div className="absolute -top-4 -left-4 w-20 h-20 border-l-2 border-t-2 border-primary/50 rounded-tl-2xl" />
+                <div className="absolute -bottom-4 -right-4 w-20 h-20 border-r-2 border-b-2 border-primary/50 rounded-br-2xl" />
+              </div>
+            </AnimatedSection>
+
+            {/* Text Content */}
+            <AnimatedSection delay={200}>
               <div className="space-y-6">
+                <h3 className="text-2xl md:text-3xl font-bold">
+                  Eu vou <span className="text-gradient">Desenvolver</span> os melhores sistemas
+                </h3>
+                
                 <p className="text-muted-foreground leading-relaxed">
                   {texts.about.paragraph1}
                 </p>
+                
                 <p className="text-muted-foreground leading-relaxed">
                   {texts.about.paragraph2}
                 </p>
                 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-4 pt-6">
-                  <div className="text-center p-4 rounded-lg bg-secondary/30 border border-border">
+                  <div className="text-center p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-all">
                     <span className="text-2xl md:text-3xl font-bold text-primary block">1+</span>
                     <span className="text-sm text-muted-foreground">Ano de Estudo</span>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-secondary/30 border border-border">
+                  <div className="text-center p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-all">
                     <span className="text-2xl md:text-3xl font-bold text-primary block">5+</span>
                     <span className="text-sm text-muted-foreground">Projetos</span>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-secondary/30 border border-border">
+                  <div className="text-center p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-all">
                     <span className="text-2xl md:text-3xl font-bold text-primary block">3+</span>
                     <span className="text-sm text-muted-foreground">Certificados</span>
                   </div>
                 </div>
               </div>
             </AnimatedSection>
-
-            {/* Code Block */}
-            <AnimatedSection delay={200}>
-              <div className="relative">
-                <div className="rounded-xl overflow-hidden border border-border bg-card">
-                  <div className="flex items-center gap-2 px-4 py-3 bg-secondary/50 border-b border-border">
-                    <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                    <div className="w-3 h-3 rounded-full bg-primary/60" />
-                    <span className="ml-2 font-mono text-xs text-muted-foreground">developer.ts</span>
-                  </div>
-                  <pre className="p-6 font-mono text-sm overflow-x-auto">
-                    <code>
-                      <span className="text-purple-400">const</span>{" "}
-                      <span className="text-foreground">developer</span>{" "}
-                      <span className="text-primary">=</span> {"{"}
-                      {"\n"}
-                      {"  "}
-                      <span className="text-foreground">name</span>
-                      <span className="text-primary">:</span>{" "}
-                      <span className="text-primary">"Gustavo Melo"</span>,
-                      {"\n"}
-                      {"  "}
-                      <span className="text-foreground">role</span>
-                      <span className="text-primary">:</span>{" "}
-                      <span className="text-primary">"Backend Developer"</span>,
-                      {"\n"}
-                      {"  "}
-                      <span className="text-foreground">languages</span>
-                      <span className="text-primary">:</span> [
-                      <span className="text-primary">"TS"</span>,{" "}
-                      <span className="text-primary">"Python"</span>,{" "}
-                      <span className="text-primary">"Node.js"</span>],
-                      {"\n"}
-                      {"  "}
-                      <span className="text-foreground">available</span>
-                      <span className="text-primary">:</span>{" "}
-                      <span className="text-blue-400">true</span>
-                      {"\n"}
-                      {"}"};</code>
-                  </pre>
-                </div>
-              </div>
-            </AnimatedSection>
           </div>
+
+          {/* Skills Section Title */}
+          <AnimatedSection delay={300}>
+            <div className="text-center mb-12">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                Minhas Skills
+              </h3>
+              <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
+            </div>
+          </AnimatedSection>
 
           {/* Skills Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {skills.map((skill, index) => (
-              <AnimatedSection key={skill.title} delay={300 + index * 100}>
+              <AnimatedSection key={skill.title} delay={400 + index * 100}>
                 <div className="group p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:glow h-full">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <skill.icon className="w-6 h-6 text-primary" />
+                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                    <skill.icon className="w-7 h-7 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+                  <h4 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
                     {skill.title}
-                  </h3>
+                  </h4>
                   <p className="text-sm text-muted-foreground">
                     {skill.description}
                   </p>
