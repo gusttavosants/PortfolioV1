@@ -1,6 +1,7 @@
 import { Github, Linkedin, Instagram, Youtube, ChevronDown } from "lucide-react";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import FloatingCubes from "./FloatingCubes";
+import profilePhoto from "@/assets/profile-photo.png";
 
 const HeroSection = () => {
   const { texts } = usePortfolioData();
@@ -94,13 +95,15 @@ const HeroSection = () => {
                     </a>
                   </div>
 
-                  {/* Profile Image Placeholder */}
+                  {/* Profile Image */}
                   <div className="relative animate-fade-up" style={{ animationDelay: "0.5s" }}>
                     <div className="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border-2 border-primary/30 relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
-                      <div className="w-full h-full bg-secondary flex items-center justify-center">
-                        <span className="text-6xl text-primary/50">👨‍💻</span>
-                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10" />
+                      <img 
+                        src={profilePhoto} 
+                        alt="Profile" 
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     
                     {/* Decorative element */}
