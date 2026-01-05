@@ -13,6 +13,22 @@ const DEFAULT_EXPERIENCES: Experience[] = [
     startDate: "Ago 2024",
     endDate: "Atual",
     description: "Atuo no desenvolvimento de aplicações backend com Node.js, TypeScript e Nest.js. Trabalhando com arquitetura RAG, criação de agentes de IA e vibe coding. Participando de projetos que envolvem Python e integração de sistemas."
+  },
+  {
+    id: "2",
+    title: "Auxiliar de Produção",
+    company: "Fábrica Delapria",
+    startDate: "Jun 2025",
+    endDate: "Nov 2025",
+    description: "Aplicação de disciplina e atenção aos detalhes na execução de processos, garantindo a qualidade do produto e a eficiência da linha de produção. Desenvolvimento de Trabalho em Equipe e Comunicação Interpessoal em um ambiente de ritmo acelerado. Habilidade em seguir protocolos e gerenciar o fluxo de trabalho sob pressão, demonstrando Senso de Responsabilidade."
+  },
+  {
+    id: "3",
+    title: "Jovem Aprendiz",
+    company: "AmstedMaxion",
+    startDate: "Fev 2024",
+    endDate: "Dez 2024",
+    description: "Exposição e contato com rotinas de Infraestrutura de Tecnologia da Informação (TI), auxiliando na organização e manutenção de recursos de dados. Fortalecimento de habilidades comportamentais (soft skills), como Agilidade e Capacidade de Adaptação em novos ambientes de trabalho. Atuação proativa na resolução de pequenos desafios operacionais, desenvolvendo o senso de Iniciativa e Organização."
   }
 ];
 
