@@ -10,7 +10,7 @@ const DEFAULT_EXPERIENCES: Experience[] = [
     id: "1",
     title: "Trainee Desenvolvedor Backend",
     company: "Pixafow",
-    startDate: "Ago 2024",
+    startDate: "Nov 2025",
     endDate: "Atual",
     description: "Atuo no desenvolvimento de aplicações backend com Node.js, TypeScript e Nest.js. Trabalhando com arquitetura RAG, criação de agentes de IA e vibe coding. Participando de projetos que envolvem Python e integração de sistemas."
   },
