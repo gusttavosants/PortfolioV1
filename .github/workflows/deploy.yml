@@ -20,7 +20,7 @@ jobs:
           node-version: '20' # Use a versão do node que você usa
 
       - name: Instalar dependências
-        run: npm ci # Ou npm install
+        run: npm install
 
       - name: Buildar o projeto
         run: npm run build # O comando que gera a pasta dist ou build
