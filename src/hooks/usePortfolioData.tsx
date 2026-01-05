@@ -1,121 +1,73 @@
 import { useState, useEffect } from "react";
-import { Certificate, Project } from "@/types/portfolio";
+import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
 
 const DEFAULT_CERTIFICATES: Certificate[] = [
-  {
-    id: "1",
-    title: "AWS Certified Developer",
-    issuer: "Amazon Web Services",
-    date: "2024",
-    credentialUrl: "#",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=250&fit=crop",
-  },
-  {
-    id: "2",
-    title: "Docker Certified Associate",
-    issuer: "Docker Inc.",
-    date: "2024",
-    credentialUrl: "#",
-    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=400&h=250&fit=crop",
-  },
-  {
-    id: "3",
-    title: "PostgreSQL Administration",
-    issuer: "PostgreSQL",
-    date: "2023",
-    credentialUrl: "#",
-    image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=400&h=250&fit=crop",
-  },
-  {
-    id: "4",
-    title: "Node.js Application Developer",
-    issuer: "OpenJS Foundation",
-    date: "2023",
-    credentialUrl: "#",
-    image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
-  },
-  {
-    id: "5",
-    title: "Python Professional Certificate",
-    issuer: "Python Institute",
-    date: "2023",
-    credentialUrl: "#",
-    image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400&h=250&fit=crop",
-  },
-  {
-    id: "6",
-    title: "Kubernetes Administrator",
-    issuer: "CNCF",
-    date: "2022",
-    credentialUrl: "#",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=250&fit=crop",
-  },
+  
 ];
 
-const DEFAULT_PROJECTS: Project[] = [
+const DEFAULT_EXPERIENCES: Experience[] = [
   {
     id: "1",
-    title: "API Gateway Microservices",
-    description: "Gateway de APIs com autenticação JWT, rate limiting, load balancing e monitoramento em tempo real.",
-    technologies: ["Node.js", "Redis", "Docker", "Kong"],
-    githubUrl: "#",
-    liveUrl: "#",
+    title: "Trainee Desenvolvedor Backend",
+    company: "Pixafow",
+    startDate: "Nov 2025",
+    endDate: "Atual",
+    description: "Atuo no desenvolvimento de aplicações backend com Node.js, TypeScript e Nest.js. Trabalhando com arquitetura RAG, criação de agentes de IA e vibe coding. Participando de projetos que envolvem Python e integração de sistemas."
   },
   {
     id: "2",
-    title: "Sistema de Filas Distribuído",
-    description: "Sistema de processamento assíncrono com filas distribuídas, retry automático e dead letter queues.",
-    technologies: ["Python", "RabbitMQ", "PostgreSQL", "Celery"],
-    githubUrl: "#",
-    liveUrl: null,
+    title: "Auxiliar de Produção",
+    company: "Fábrica Delapria",
+    startDate: "Jun 2025",
+    endDate: "Nov 2025",
+    description: "Aplicação de disciplina e atenção aos detalhes na execução de processos, garantindo a qualidade do produto e a eficiência da linha de produção. Desenvolvimento de Trabalho em Equipe e Comunicação Interpessoal em um ambiente de ritmo acelerado. Habilidade em seguir protocolos e gerenciar o fluxo de trabalho sob pressão, demonstrando Senso de Responsabilidade."
   },
   {
     id: "3",
-    title: "E-commerce Backend",
-    description: "Backend completo para e-commerce com carrinho, pagamentos, estoque e notificações em tempo real.",
-    technologies: ["Java", "Spring Boot", "MySQL", "Stripe"],
-    githubUrl: "#",
-    liveUrl: "#",
+    title: "Jovem Aprendiz",
+    company: "AmstedMaxion",
+    startDate: "Fev 2024",
+    endDate: "Dez 2024",
+    description: "Exposição e contato com rotinas de Infraestrutura de Tecnologia da Informação (TI), auxiliando na organização e manutenção de recursos de dados. Fortalecimento de habilidades comportamentais (soft skills), como Agilidade e Capacidade de Adaptação em novos ambientes de trabalho. Atuação proativa na resolução de pequenos desafios operacionais, desenvolvendo o senso de Iniciativa e Organização."
+  }
+];
+
+const DEFAULT_TEXTS: TextContent = {
+  hero: {
+    title: "Gustavo",
+    subtitle: "Desenvolvedor Backend | Python | Node.js | NestJS | IA/RAG",
+    cta: "Entre em contato",
   },
-  {
-    id: "4",
-    title: "Data Pipeline ETL",
-    description: "Pipeline de dados para processamento batch e streaming com orquestração e monitoramento.",
-    technologies: ["Python", "Apache Airflow", "Spark", "S3"],
-    githubUrl: "#",
-    liveUrl: null,
+  about: {
+    title: "Sobre mim",
+    paragraph1: "Sou um Desenvolvedor Backend e estudante de Análise e Desenvolvimento de Sistemas com forte paixão pela construção de soluções robustas. Meu foco principal está em Python e no ecossistema Node.js (incluindo NestJS), aplicando as melhores práticas para desenvolver RESTful APIs eficientes e escaláveis.",
+    paragraph2: "Possuo experiência em arquitetura de dados, incluindo a aplicação de Arquitetura RAG (Retrieval-Augmented Generation), e conhecimentos em Operações de TI. Demonstro agilidade na resolução de problemas e grande capacidade de adaptação a novas tecnologias e projetos. Além do desenvolvimento, trago um diferencial com experiência prévia em Manutenção de Hardware, Instalação de Sistemas e Suporte a Usuários, o que me proporciona uma visão completa sobre a infraestrutura e o ciclo de vida do software.",
   },
-  {
-    id: "5",
-    title: "Real-time Chat API",
-    description: "API de chat em tempo real com WebSockets, persistência de mensagens e notificações push.",
-    technologies: ["Node.js", "Socket.io", "MongoDB", "Redis"],
-    githubUrl: "#",
-    liveUrl: "#",
-  },
-  {
-    id: "6",
-    title: "Authentication Service",
-    description: "Serviço de autenticação com OAuth2, 2FA, gerenciamento de sessões e integração LDAP.",
-    technologies: ["Go", "PostgreSQL", "Redis", "gRPC"],
-    githubUrl: "#",
-    liveUrl: null,
-  },
+};
+
+const DEFAULT_PROJECTS: Project[] = [
+  
 ];
 
 const STORAGE_KEYS = {
   certificates: "portfolio_certificates",
   projects: "portfolio_projects",
+  experiences: "portfolio_experiences",
+  texts: "portfolio_texts",
 };
 
 export const usePortfolioData = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [texts, setTexts] = useState<TextContent>(DEFAULT_TEXTS);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedCertificates = localStorage.getItem(STORAGE_KEYS.certificates);
     const storedProjects = localStorage.getItem(STORAGE_KEYS.projects);
+    const storedExperiences = localStorage.getItem(STORAGE_KEYS.experiences);
+    const storedTexts = localStorage.getItem(STORAGE_KEYS.texts);
 
     setCertificates(
       storedCertificates ? JSON.parse(storedCertificates) : DEFAULT_CERTIFICATES
@@ -123,6 +75,10 @@ export const usePortfolioData = () => {
     setProjects(
       storedProjects ? JSON.parse(storedProjects) : DEFAULT_PROJECTS
     );
+    setExperiences(
+      storedExperiences ? JSON.parse(storedExperiences) : DEFAULT_EXPERIENCES
+    );
+    setTexts(storedTexts ? JSON.parse(storedTexts) : DEFAULT_TEXTS);
     setIsLoading(false);
   }, []);
 
@@ -134,6 +90,16 @@ export const usePortfolioData = () => {
   const saveProjects = (newProjects: Project[]) => {
     setProjects(newProjects);
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(newProjects));
+  };
+
+  const saveExperiences = (newExperiences: Experience[]) => {
+    setExperiences(newExperiences);
+    localStorage.setItem(STORAGE_KEYS.experiences, JSON.stringify(newExperiences));
+  };
+
+  const saveTexts = (newTexts: TextContent) => {
+    setTexts(newTexts);
+    localStorage.setItem(STORAGE_KEYS.texts, JSON.stringify(newTexts));
   };
 
   const addCertificate = (certificate: Omit<Certificate, "id">) => {
@@ -176,5 +142,26 @@ export const usePortfolioData = () => {
     addProject,
     removeProject,
     updateProject,
+
+    // Texts
+    texts,
+    updateTexts: (newTexts: TextContent) => {
+      saveTexts(newTexts);
+    },
+
+    // Experiences
+    experiences,
+    addExperience: (experience: Omit<Experience, "id">) => {
+      const newExperience = { ...experience, id: crypto.randomUUID() };
+      saveExperiences([...experiences, newExperience]);
+    },
+    removeExperience: (id: string) => {
+      saveExperiences(experiences.filter((e) => e.id !== id));
+    },
+    updateExperience: (id: string, experience: Omit<Experience, "id">) => {
+      saveExperiences(
+        experiences.map((e) => (e.id === id ? { ...experience, id } : e))
+      );
+    },
   };
 };
