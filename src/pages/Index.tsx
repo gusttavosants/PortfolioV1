@@ -31,10 +31,10 @@ const Index = () => {
         <main>
           <HeroSection />
           <AboutSection />
+          <ExperienceSection />
           <CertificatesSection />
           <ProjectsSection />
           <ContactSection />
-          {showCv && <ExperienceSection />}
         </main>
         <Footer />
       </div>
