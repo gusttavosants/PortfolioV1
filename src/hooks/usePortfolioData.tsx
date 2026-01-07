@@ -2,7 +2,16 @@ import { useState, useEffect } from "react";
 import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
 
 const DEFAULT_CERTIFICATES: Certificate[] = [
-  
+  {
+    id: "1",
+    title: "Desenvolvedor Back-End",
+    issuer: "SENAI - Escola Cruzeiro",
+    date: "26/11/2025",
+    location: "Cruzeiro, SP",
+    credentialUrl: "https://www.sp.senai.br/consulta-certificado?qrcode=39025284658/15443590",
+    image: "/certificates/certificado-backend-thumb.jpg",
+    pdfFile: "/certificates/certificado-backend.pdf"
+  }
 ];
 
 const DEFAULT_EXPERIENCES: Experience[] = [
