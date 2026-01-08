@@ -2,7 +2,16 @@ import { useState, useEffect } from "react";
 import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
 
 const DEFAULT_CERTIFICATES: Certificate[] = [
-  
+  {
+    id: "1",
+    title: "Desenvolvedor Back-End",
+    issuer: "SENAI - Escola Cruzeiro",
+    date: "26/11/2025",
+    location: "Cruzeiro, SP",
+    credentialUrl: "https://www.sp.senai.br/consulta-certificado?qrcode=39025284658/15443590",
+    image: "/certificates/certificado-backend-thumb.jpg",
+    pdfFile: "/certificates/certificado-backend.pdf"
+  }
 ];
 
 const DEFAULT_EXPERIENCES: Experience[] = [
@@ -46,7 +55,38 @@ const DEFAULT_TEXTS: TextContent = {
 };
 
 const DEFAULT_PROJECTS: Project[] = [
-  
+  {
+    id: "1",
+    title: "Projeto ChatBot",
+    description: "Desenvolvimento de um chatbot inteligente utilizando técnicas de processamento de linguagem natural.",
+    technologies: ["Python", "NLP", "AI"],
+    githubUrl: "https://github.com/gusttavosants/ProjetoChatBot",
+    liveUrl: null
+  },
+  {
+    id: "2",
+    title: "ChatBot Sistema de Ponto",
+    description: "Sistema de ponto eletrônico integrado com chatbot para registro e consulta de horários.",
+    technologies: ["Python", "ChatBot", "Automação"],
+    githubUrl: "https://github.com/gusttavosants/ChatBot_SistemaDePonto",
+    liveUrl: null
+  },
+  {
+    id: "3",
+    title: "Delivery Control",
+    description: "Sistema de controle e gerenciamento de entregas para otimização de processos logísticos.",
+    technologies: ["Backend", "API", "Node.js"],
+    githubUrl: "https://github.com/gusttavosants/DeliveryControl",
+    liveUrl: null
+  },
+  {
+    id: "4",
+    title: "Portfolio V1",
+    description: "Primeira versão do portfólio pessoal, desenvolvido para apresentar projetos e habilidades.",
+    technologies: ["HTML", "CSS", "JavaScript"],
+    githubUrl: "https://github.com/gusttavosants/PortfolioV1",
+    liveUrl: null
+  }
 ];
 
 const STORAGE_KEYS = {
