@@ -13,14 +13,14 @@ const CertificatesSection = () => {
   }>({
     isOpen: false,
     pdfData: "",
-    title: ""
+    title: "",
   });
 
   const handleViewPdf = (pdfData: string, title: string) => {
     setPdfViewer({
       isOpen: true,
       pdfData,
-      title
+      title,
     });
   };
 
@@ -28,15 +28,15 @@ const CertificatesSection = () => {
     setPdfViewer({
       isOpen: false,
       pdfData: "",
-      title: ""
+      title: "",
     });
   };
 
   if (isLoading) {
     return (
-      <section id="certificates" className="py-20 md:py-32 bg-card/50">
+      <section id="certificates" className="py-20 md:py-32 bg-black">
         <div className="container mx-auto px-4 text-center">
-          <div className="text-muted-foreground">Carregando certificados...</div>
+          <div className="text-gray-400">Carregando certificados...</div>
         </div>
       </section>
     );
@@ -44,76 +44,83 @@ const CertificatesSection = () => {
 
   return (
     <>
-      <section id="certificates" className="py-20 md:py-32 bg-card/50 relative">
-        {/* Background decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-        
-        <div className="container mx-auto px-4">
+      <section
+        id="certificates"
+        className="py-32 md:py-40 bg-black relative overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+
+        <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-6xl mx-auto">
-            {/* Section Header */}
             <AnimatedSection>
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <div className="mb-20">
+                <div className="inline-block mb-4">
+                  <span className="text-sm font-mono text-gray-500">
+                    // certificados
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
                   Certificados
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500">
+                    & Qualificações
+                  </span>
                 </h2>
-                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-                <p className="text-muted-foreground mt-6 max-w-2xl mx-auto">
-                  Certificações e cursos que demonstram meu compromisso com o aprendizado contínuo 
-                  e a busca por excelência técnica.
+                <p className="max-w-2xl text-lg text-gray-400 leading-relaxed">
+                  Certificações e cursos que demonstram meu compromisso com o
+                  aprendizado contínuo e a busca por excelência técnica.
                 </p>
               </div>
             </AnimatedSection>
 
-            {/* Certificates Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {certificates.map((cert, index) => (
                 <AnimatedSection key={cert.id} delay={index * 100}>
-                  <div className="group rounded-xl overflow-hidden bg-background border border-border hover:border-primary/50 transition-all duration-300 h-full">
-                    {/* Certificate Image */}
+                  <div className="group h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/10">
                     <div className="relative h-48 overflow-hidden">
                       <img
                         src={cert.image}
                         alt={cert.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                       <div className="absolute top-4 right-4">
-                        <div className="p-2 rounded-lg bg-primary/20 backdrop-blur-sm">
-                          <Award className="w-5 h-5 text-primary" />
+                        <div className="rounded-xl border border-white/10 bg-black/40 p-2 backdrop-blur-sm">
+                          <Award className="w-5 h-5 text-white" />
                         </div>
                       </div>
                     </div>
 
-                    {/* Certificate Info */}
                     <div className="p-6">
-                      <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                        {cert.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm mb-4">
+                      <p className="mb-2 text-xs uppercase tracking-[0.2em] text-gray-500">
                         {cert.issuer}
                       </p>
+                      <h3 className="mb-3 line-clamp-2 text-xl font-semibold text-white transition-colors group-hover:text-gray-200">
+                        {cert.title}
+                      </h3>
 
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                      <div className="mb-6 flex items-center gap-2 text-sm text-gray-400">
                         <Calendar className="w-4 h-4" />
                         <span>{cert.date}</span>
                       </div>
 
-                      {/* Action Buttons */}
                       <div className="flex items-center gap-4">
                         {cert.pdfFile && (
                           <button
-                            onClick={() => handleViewPdf(cert.pdfFile!, cert.title)}
-                            className="flex items-center gap-1 text-sm text-primary hover:underline"
+                            onClick={() =>
+                              handleViewPdf(cert.pdfFile!, cert.title)
+                            }
+                            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white transition hover:bg-white/10"
                           >
                             <FileText className="w-4 h-4" />
-                            <span>PDF</span>
+                            <span>Abrir PDF</span>
                           </button>
                         )}
                         <a
                           href={cert.credentialUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-sm text-primary hover:underline ml-auto"
+                          className="ml-auto inline-flex items-center gap-2 text-sm text-gray-300 transition hover:text-white"
                         >
                           <span>Ver credencial</span>
                           <ExternalLink className="w-4 h-4" />
@@ -126,7 +133,7 @@ const CertificatesSection = () => {
             </div>
 
             {certificates.length === 0 && (
-              <div className="text-center text-muted-foreground py-12">
+              <div className="py-12 text-center text-gray-400">
                 Nenhum certificado adicionado ainda.
               </div>
             )}

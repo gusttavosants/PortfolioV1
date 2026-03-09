@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Linkedin, Github, Dribbble } from "lucide-react";
 
 const navItems = [
-  { label: "Início", href: "#home" },
-  { label: "Sobre", href: "#about" },
-  { label: "Certificados", href: "#certificates" },
-  { label: "Projetos", href: "#projects" },
-  { label: "Contato", href: "#contact" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/gustsants/",
+    icon: Linkedin,
+  },
+  { label: "Github", href: "https://github.com/gusttavosants", icon: Github },
+  { label: "Dribbble", href: "https://dribbble.com", icon: Dribbble },
 ];
 
 const Navbar = () => {
@@ -21,10 +23,14 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+  const handleNavClick = (href: string, isExternal: boolean) => {
+    if (isExternal) {
+      window.open(href, "_blank", "noopener noreferrer");
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
     setIsOpen(false);
   };
@@ -32,71 +38,61 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass border-b border-border" : ""
+        scrolled
+          ? "bg-black/80 backdrop-blur-sm border-b border-white/10"
+          : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-end h-16 md:h-20">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                  aria-label={item.label}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
+          </div>
+
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-foreground p-2"
+            className="md:hidden text-white p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-
-          {/* Logo - Centered */}
-          <a
-            href="#home"
-            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1 text-foreground hover:text-primary transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("#home");
-            }}
-          >
-            <span className="font-bold text-lg">Gustavo</span>
-            <span className="font-bold text-lg text-primary">Melo</span>
-          </a>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8 ml-auto">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.href);
-                }}
-                className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-
-          {/* Spacer for mobile */}
-          <div className="md:hidden w-10" />
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden glass border-t border-border animate-fade-up">
+          <div className="md:hidden bg-black/95 backdrop-blur-sm border-t border-white/10 animate-fade-up">
             <div className="py-4 space-y-2">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.href);
-                  }}
-                  className="block px-4 py-2 text-muted-foreground hover:text-primary hover:bg-secondary/50 transition-colors rounded-lg"
-                >
-                  {item.label}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 transition-colors rounded-lg"
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{item.label}</span>
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}
