@@ -128,7 +128,7 @@ const AnimatedMenu = () => {
                   <h2 className="text-2xl font-bold text-white mb-2">
                     Gustavo<span className="text-gray-400">Melo</span>
                   </h2>
-                  <p className="text-gray-500 text-sm">Frontend Developer</p>
+                  <p className="text-gray-500 text-sm">Backend Developer</p>
                 </motion.div>
 
                 {/* Navigation */}

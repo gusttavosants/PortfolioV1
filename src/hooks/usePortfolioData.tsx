@@ -24,7 +24,7 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
 const DEFAULT_EXPERIENCES: Experience[] = [
   {
     id: "1",
-    title: "Junior Desenvolvedor Backend",
+    title: "Desenvolvedor Backend",
     company: "Pixafow",
     startDate: "Nov 2025",
     endDate: "Atual",

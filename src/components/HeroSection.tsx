@@ -3,13 +3,7 @@ import { usePortfolioData } from "@/hooks/usePortfolioData";
 const HeroSection = () => {
   const { texts } = usePortfolioData();
 
-  const topSkills = [
-    "JavaScript",
-    "React.js",
-    "CSS",
-    "Software Design",
-    "UI/UX Design",
-  ];
+  const topSkills = ["Python", "Node.js", "NestJS", "REST APIs", "PostgreSQL"];
 
   return (
     <section
@@ -31,21 +25,21 @@ const HeroSection = () => {
             className="text-base md:text-lg text-gray-400 leading-relaxed mb-4 animate-fade-up"
             style={{ animationDelay: "0.3s" }}
           >
-            Frontend Software Engineer who develops user-centered products.
+            Backend Developer especializado em criar APIs robustas e escaláveis.
           </p>
           <p
             className="text-base md:text-lg text-gray-400 leading-relaxed mb-8 animate-fade-up"
             style={{ animationDelay: "0.4s" }}
           >
-            Passionate to create them with engineering and design principles.
+            Apaixonado por desenvolver soluções com Python, Node.js e NestJS.
           </p>
           <p
             className="text-base md:text-lg text-gray-400 leading-relaxed mb-8 animate-fade-up"
             style={{ animationDelay: "0.5s" }}
           >
-            Currently working on{" "}
+            Atualmente trabalhando em{" "}
             <a href="#projects" className="text-white hover:underline">
-              amazing projects
+              projetos incríveis
             </a>
             . ✨
           </p>

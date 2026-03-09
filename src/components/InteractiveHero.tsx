@@ -122,7 +122,7 @@ const InteractiveHero = () => {
           >
             <motion.a
               href="/contact"
-              className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-xl font-medium hover:bg-gray-100 transition-all"
+              className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -132,7 +132,7 @@ const InteractiveHero = () => {
 
             <motion.a
               href="/projects"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 backdrop-blur-sm text-white rounded-xl font-medium border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-medium border border-white/20 hover:bg-white/5 transition-all"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
