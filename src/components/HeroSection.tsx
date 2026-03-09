@@ -1,155 +1,87 @@
-import { Github, Linkedin, Instagram, Youtube, ChevronDown } from "lucide-react";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
-import FloatingCubes from "./FloatingCubes";
-import profilePhoto from "@/assets/profile-photo.png";
 
 const HeroSection = () => {
   const { texts } = usePortfolioData();
-  
+
+  const topSkills = [
+    "JavaScript",
+    "React.js",
+    "CSS",
+    "Software Design",
+    "UI/UX Design",
+  ];
+
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card/50" />
-      
-      {/* Floating 3D Cubes */}
-      <FloatingCubes />
+      <div className="container mx-auto px-4 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          {/* Greeting */}
+          <h1
+            className="text-2xl md:text-3xl font-normal text-white mb-6 animate-fade-up"
+            style={{ animationDelay: "0.2s" }}
+          >
+            Hi, I'm Gustavo.
+          </h1>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-[auto_1fr] gap-12 items-center">
-            {/* Social Links - Left Side */}
-            <div className="hidden lg:flex flex-col items-center gap-6">
-              <div className="flex flex-col gap-4">
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-muted-foreground hover:text-primary transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-muted-foreground hover:text-primary transition-colors"
-                  aria-label="Twitter"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                </a>
-                <a
-                  href="https://github.com/gusttavosants"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-muted-foreground hover:text-primary transition-colors"
-                  aria-label="GitHub"
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-muted-foreground hover:text-primary transition-colors"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
+          {/* Description */}
+          <p
+            className="text-base md:text-lg text-gray-400 leading-relaxed mb-4 animate-fade-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            Frontend Software Engineer who develops user-centered products.
+          </p>
+          <p
+            className="text-base md:text-lg text-gray-400 leading-relaxed mb-8 animate-fade-up"
+            style={{ animationDelay: "0.4s" }}
+          >
+            Passionate to create them with engineering and design principles.
+          </p>
+          <p
+            className="text-base md:text-lg text-gray-400 leading-relaxed mb-8 animate-fade-up"
+            style={{ animationDelay: "0.5s" }}
+          >
+            Currently working on{" "}
+            <a href="#projects" className="text-white hover:underline">
+              amazing projects
+            </a>
+            . ✨
+          </p>
 
-            {/* Main Content */}
-            <div className="relative">
-              <div className="main-frame p-8 md:p-12 lg:p-16 bg-card/40 backdrop-blur-sm">
-                <div className="flex flex-col lg:flex-row items-center gap-12">
-                  {/* Text Content */}
-                  <div className="flex-1 text-center lg:text-left">
-                    <p className="text-muted-foreground mb-2 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                      — Olá
-                    </p>
-                    
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-                      Eu sou <span className="text-gradient">{texts.hero.title}</span>
-                    </h1>
-                    
-                    <p className="text-lg text-muted-foreground mb-8 animate-fade-up" style={{ animationDelay: "0.3s" }}>
-                      {texts.hero.subtitle}
-                    </p>
-                    
-                    <a
-                      href="#about"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-all glow animate-fade-up"
-                      style={{ animationDelay: "0.4s" }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                    >
-                      Saiba mais
-                    </a>
-                  </div>
-
-                  {/* Profile Image */}
-                  <div className="relative animate-fade-up" style={{ animationDelay: "0.5s" }}>
-                    <div className="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border-2 border-primary/30 relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10" />
-                      <img 
-                        src={profilePhoto} 
-                        alt="Profile" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    
-                    {/* Decorative element */}
-                    <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Scroll indicator */}
-              <div className="absolute -bottom-16 left-0 flex items-center gap-2 text-muted-foreground text-sm">
-                <ChevronDown className="w-4 h-4 animate-bounce" />
-                <span className="rotate-90 origin-left translate-x-4">scroll down</span>
-              </div>
+          {/* Top Skills */}
+          <div
+            className="mb-10 animate-fade-up"
+            style={{ animationDelay: "0.6s" }}
+          >
+            <h2 className="text-sm font-medium text-white mb-4">Top Skills</h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {topSkills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 hover:bg-white/10 transition-colors"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* Mobile Social Links */}
-          <div className="flex lg:hidden justify-center gap-4 mt-8">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-lg bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-all"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href="https://github.com/gusttavosants"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-lg bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-all"
-              aria-label="GitHub"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/gustsants/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-lg bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-all"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-          </div>
+          {/* CTA Button */}
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-all animate-fade-up"
+            style={{ animationDelay: "0.7s" }}
+            onClick={(e) => {
+              e.preventDefault();
+              document
+                .querySelector("#contact")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Say Hello
+          </a>
         </div>
       </div>
     </section>

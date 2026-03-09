@@ -10,6 +10,12 @@ import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import Contact from "./pages/Contact";
+import Experience from "./pages/Experience";
+import Projects from "./pages/Projects";
+import About from "./pages/About";
+import Certificates from "./pages/Certificates";
+import ProjectDetail from "./pages/ProjectDetail";
 
 const queryClient = new QueryClient();
 
@@ -23,14 +29,20 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/experience" element={<Experience />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:id" element={<ProjectDetail />} />
+              <Route path="/certificates" element={<Certificates />} />
               <Route path="/login" element={<Login />} />
-              <Route 
-                path="/admin" 
+              <Route
+                path="/admin"
                 element={
                   <ProtectedRoute>
                     <Admin />
                   </ProtectedRoute>
-                } 
+                }
               />
               <Route path="*" element={<NotFound />} />
             </Routes>

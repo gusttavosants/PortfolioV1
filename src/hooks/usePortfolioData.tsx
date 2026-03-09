@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
+import {
+  Certificate,
+  Project,
+  Experience,
+  TextContent,
+  FeaturedGithubProject,
+} from "@/types/portfolio";
 
 const DEFAULT_CERTIFICATES: Certificate[] = [
   {
@@ -8,20 +14,22 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
     issuer: "SENAI - Escola Cruzeiro",
     date: "26/11/2025",
     location: "Cruzeiro, SP",
-    credentialUrl: "https://www.sp.senai.br/consulta-certificado?qrcode=39025284658/15443590",
+    credentialUrl:
+      "https://www.sp.senai.br/consulta-certificado?qrcode=39025284658/15443590",
     image: "/certificates/certificado-backend-thumb.jpg",
-    pdfFile: "/certificates/certificado-backend.pdf"
-  }
+    pdfFile: "/certificates/certificado-backend.pdf",
+  },
 ];
 
 const DEFAULT_EXPERIENCES: Experience[] = [
   {
     id: "1",
-    title: "Trainee Desenvolvedor Backend",
+    title: "Junior Desenvolvedor Backend",
     company: "Pixafow",
     startDate: "Nov 2025",
     endDate: "Atual",
-    description: "Atuo no desenvolvimento de aplicações backend com Node.js, TypeScript e Nest.js. Trabalhando com arquitetura RAG, criação de agentes de IA e vibe coding. Participando de projetos que envolvem Python e integração de sistemas."
+    description:
+      "Atuo no desenvolvimento de aplicações backend com Node.js, TypeScript e Nest.js. Trabalhando com arquitetura RAG, criação de agentes de IA e vibe coding. Participando de projetos que envolvem Python e integração de sistemas.",
   },
   {
     id: "2",
@@ -29,7 +37,8 @@ const DEFAULT_EXPERIENCES: Experience[] = [
     company: "Fábrica Delapria",
     startDate: "Jun 2025",
     endDate: "Nov 2025",
-    description: "Aplicação de disciplina e atenção aos detalhes na execução de processos, garantindo a qualidade do produto e a eficiência da linha de produção. Desenvolvimento de Trabalho em Equipe e Comunicação Interpessoal em um ambiente de ritmo acelerado. Habilidade em seguir protocolos e gerenciar o fluxo de trabalho sob pressão, demonstrando Senso de Responsabilidade."
+    description:
+      "Aplicação de disciplina e atenção aos detalhes na execução de processos, garantindo a qualidade do produto e a eficiência da linha de produção. Desenvolvimento de Trabalho em Equipe e Comunicação Interpessoal em um ambiente de ritmo acelerado. Habilidade em seguir protocolos e gerenciar o fluxo de trabalho sob pressão, demonstrando Senso de Responsabilidade.",
   },
   {
     id: "3",
@@ -37,8 +46,9 @@ const DEFAULT_EXPERIENCES: Experience[] = [
     company: "AmstedMaxion",
     startDate: "Fev 2024",
     endDate: "Dez 2024",
-    description: "Exposição e contato com rotinas de Infraestrutura de Tecnologia da Informação (TI), auxiliando na organização e manutenção de recursos de dados. Fortalecimento de habilidades comportamentais (soft skills), como Agilidade e Capacidade de Adaptação em novos ambientes de trabalho. Atuação proativa na resolução de pequenos desafios operacionais, desenvolvendo o senso de Iniciativa e Organização."
-  }
+    description:
+      "Exposição e contato com rotinas de Infraestrutura de Tecnologia da Informação (TI), auxiliando na organização e manutenção de recursos de dados. Fortalecimento de habilidades comportamentais (soft skills), como Agilidade e Capacidade de Adaptação em novos ambientes de trabalho. Atuação proativa na resolução de pequenos desafios operacionais, desenvolvendo o senso de Iniciativa e Organização.",
+  },
 ];
 
 const DEFAULT_TEXTS: TextContent = {
@@ -49,8 +59,10 @@ const DEFAULT_TEXTS: TextContent = {
   },
   about: {
     title: "Sobre mim",
-    paragraph1: "Sou um Desenvolvedor Backend e estudante de Análise e Desenvolvimento de Sistemas com forte paixão pela construção de soluções robustas. Meu foco principal está em Python e no ecossistema Node.js (incluindo NestJS), aplicando as melhores práticas para desenvolver RESTful APIs eficientes e escaláveis.",
-    paragraph2: "Possuo experiência em arquitetura de dados, incluindo a aplicação de Arquitetura RAG (Retrieval-Augmented Generation), e conhecimentos em Operações de TI. Demonstro agilidade na resolução de problemas e grande capacidade de adaptação a novas tecnologias e projetos. Além do desenvolvimento, trago um diferencial com experiência prévia em Manutenção de Hardware, Instalação de Sistemas e Suporte a Usuários, o que me proporciona uma visão completa sobre a infraestrutura e o ciclo de vida do software.",
+    paragraph1:
+      "Sou um Desenvolvedor Backend e estudante de Análise e Desenvolvimento de Sistemas com forte paixão pela construção de soluções robustas. Meu foco principal está em Python e no ecossistema Node.js (incluindo NestJS), aplicando as melhores práticas para desenvolver RESTful APIs eficientes e escaláveis.",
+    paragraph2:
+      "Possuo experiência em arquitetura de dados, incluindo a aplicação de Arquitetura RAG (Retrieval-Augmented Generation), e conhecimentos em Operações de TI. Demonstro agilidade na resolução de problemas e grande capacidade de adaptação a novas tecnologias e projetos. Além do desenvolvimento, trago um diferencial com experiência prévia em Manutenção de Hardware, Instalação de Sistemas e Suporte a Usuários, o que me proporciona uma visão completa sobre a infraestrutura e o ciclo de vida do software.",
   },
 };
 
@@ -58,35 +70,39 @@ const DEFAULT_PROJECTS: Project[] = [
   {
     id: "1",
     title: "Projeto ChatBot",
-    description: "Desenvolvimento de um chatbot inteligente utilizando técnicas de processamento de linguagem natural.",
+    description:
+      "Desenvolvimento de um chatbot inteligente utilizando técnicas de processamento de linguagem natural.",
     technologies: ["Python", "NLP", "AI"],
     githubUrl: "https://github.com/gusttavosants/ProjetoChatBot",
-    liveUrl: null
+    liveUrl: null,
   },
   {
     id: "2",
     title: "ChatBot Sistema de Ponto",
-    description: "Sistema de ponto eletrônico integrado com chatbot para registro e consulta de horários.",
+    description:
+      "Sistema de ponto eletrônico integrado com chatbot para registro e consulta de horários.",
     technologies: ["Python", "ChatBot", "Automação"],
     githubUrl: "https://github.com/gusttavosants/ChatBot_SistemaDePonto",
-    liveUrl: null
+    liveUrl: null,
   },
   {
     id: "3",
     title: "Delivery Control",
-    description: "Sistema de controle e gerenciamento de entregas para otimização de processos logísticos.",
+    description:
+      "Sistema de controle e gerenciamento de entregas para otimização de processos logísticos.",
     technologies: ["Backend", "API", "Node.js"],
     githubUrl: "https://github.com/gusttavosants/DeliveryControl",
-    liveUrl: null
+    liveUrl: null,
   },
   {
     id: "4",
     title: "Portfolio V1",
-    description: "Primeira versão do portfólio pessoal, desenvolvido para apresentar projetos e habilidades.",
+    description:
+      "Primeira versão do portfólio pessoal, desenvolvido para apresentar projetos e habilidades.",
     technologies: ["HTML", "CSS", "JavaScript"],
     githubUrl: "https://github.com/gusttavosants/PortfolioV1",
-    liveUrl: null
-  }
+    liveUrl: null,
+  },
 ];
 
 const STORAGE_KEYS = {
@@ -94,13 +110,24 @@ const STORAGE_KEYS = {
   projects: "portfolio_projects",
   experiences: "portfolio_experiences",
   texts: "portfolio_texts",
+  githubUsername: "portfolio_github_username",
+  featuredGithubProjects: "portfolio_featured_github_projects",
 };
+
+const DEFAULT_GITHUB_USERNAME = "gusttavosants";
+const DEFAULT_FEATURED_GITHUB_PROJECTS: FeaturedGithubProject[] = [];
 
 export const usePortfolioData = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [texts, setTexts] = useState<TextContent>(DEFAULT_TEXTS);
+  const [featuredGithubProjects, setFeaturedGithubProjects] = useState<
+    FeaturedGithubProject[]
+  >(DEFAULT_FEATURED_GITHUB_PROJECTS);
+  const [githubUsername, setGithubUsername] = useState<string>(
+    DEFAULT_GITHUB_USERNAME,
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -108,23 +135,38 @@ export const usePortfolioData = () => {
     const storedProjects = localStorage.getItem(STORAGE_KEYS.projects);
     const storedExperiences = localStorage.getItem(STORAGE_KEYS.experiences);
     const storedTexts = localStorage.getItem(STORAGE_KEYS.texts);
+    const storedGithubUsername = localStorage.getItem(
+      STORAGE_KEYS.githubUsername,
+    );
+    const storedFeaturedGithubProjects = localStorage.getItem(
+      STORAGE_KEYS.featuredGithubProjects,
+    );
 
     setCertificates(
-      storedCertificates ? JSON.parse(storedCertificates) : DEFAULT_CERTIFICATES
+      storedCertificates
+        ? JSON.parse(storedCertificates)
+        : DEFAULT_CERTIFICATES,
     );
-    setProjects(
-      storedProjects ? JSON.parse(storedProjects) : DEFAULT_PROJECTS
-    );
+    setProjects(storedProjects ? JSON.parse(storedProjects) : DEFAULT_PROJECTS);
     setExperiences(
-      storedExperiences ? JSON.parse(storedExperiences) : DEFAULT_EXPERIENCES
+      storedExperiences ? JSON.parse(storedExperiences) : DEFAULT_EXPERIENCES,
     );
     setTexts(storedTexts ? JSON.parse(storedTexts) : DEFAULT_TEXTS);
+    setGithubUsername(storedGithubUsername || DEFAULT_GITHUB_USERNAME);
+    setFeaturedGithubProjects(
+      storedFeaturedGithubProjects
+        ? JSON.parse(storedFeaturedGithubProjects)
+        : DEFAULT_FEATURED_GITHUB_PROJECTS,
+    );
     setIsLoading(false);
   }, []);
 
   const saveCertificates = (newCertificates: Certificate[]) => {
     setCertificates(newCertificates);
-    localStorage.setItem(STORAGE_KEYS.certificates, JSON.stringify(newCertificates));
+    localStorage.setItem(
+      STORAGE_KEYS.certificates,
+      JSON.stringify(newCertificates),
+    );
   };
 
   const saveProjects = (newProjects: Project[]) => {
@@ -134,12 +176,25 @@ export const usePortfolioData = () => {
 
   const saveExperiences = (newExperiences: Experience[]) => {
     setExperiences(newExperiences);
-    localStorage.setItem(STORAGE_KEYS.experiences, JSON.stringify(newExperiences));
+    localStorage.setItem(
+      STORAGE_KEYS.experiences,
+      JSON.stringify(newExperiences),
+    );
   };
 
   const saveTexts = (newTexts: TextContent) => {
     setTexts(newTexts);
     localStorage.setItem(STORAGE_KEYS.texts, JSON.stringify(newTexts));
+  };
+
+  const saveFeaturedGithubProjects = (
+    newFeaturedGithubProjects: FeaturedGithubProject[],
+  ) => {
+    setFeaturedGithubProjects(newFeaturedGithubProjects);
+    localStorage.setItem(
+      STORAGE_KEYS.featuredGithubProjects,
+      JSON.stringify(newFeaturedGithubProjects),
+    );
   };
 
   const addCertificate = (certificate: Omit<Certificate, "id">) => {
@@ -151,9 +206,12 @@ export const usePortfolioData = () => {
     saveCertificates(certificates.filter((c) => c.id !== id));
   };
 
-  const updateCertificate = (id: string, certificate: Omit<Certificate, "id">) => {
+  const updateCertificate = (
+    id: string,
+    certificate: Omit<Certificate, "id">,
+  ) => {
     saveCertificates(
-      certificates.map((c) => (c.id === id ? { ...certificate, id } : c))
+      certificates.map((c) => (c.id === id ? { ...certificate, id } : c)),
     );
   };
 
@@ -167,9 +225,7 @@ export const usePortfolioData = () => {
   };
 
   const updateProject = (id: string, project: Omit<Project, "id">) => {
-    saveProjects(
-      projects.map((p) => (p.id === id ? { ...project, id } : p))
-    );
+    saveProjects(projects.map((p) => (p.id === id ? { ...project, id } : p)));
   };
 
   return {
@@ -200,7 +256,60 @@ export const usePortfolioData = () => {
     },
     updateExperience: (id: string, experience: Omit<Experience, "id">) => {
       saveExperiences(
-        experiences.map((e) => (e.id === id ? { ...experience, id } : e))
+        experiences.map((e) => (e.id === id ? { ...experience, id } : e)),
+      );
+    },
+
+    // GitHub
+    githubUsername,
+    updateGithubUsername: (username: string) => {
+      setGithubUsername(username);
+      localStorage.setItem(STORAGE_KEYS.githubUsername, username);
+    },
+    featuredGithubProjects,
+    toggleFeaturedGithubProject: (
+      repoName: string,
+      fallbackDescription: string,
+    ) => {
+      const existingProject = featuredGithubProjects.find(
+        (project) => project.repoName === repoName,
+      );
+
+      if (existingProject) {
+        saveFeaturedGithubProjects(
+          featuredGithubProjects.filter(
+            (project) => project.repoName !== repoName,
+          ),
+        );
+        return;
+      }
+
+      const newFeaturedProject: FeaturedGithubProject = {
+        id: `github-${repoName}`,
+        repoName,
+        title: repoName,
+        description:
+          fallbackDescription || "Repositório em destaque do GitHub.",
+        longDescription:
+          fallbackDescription ||
+          "Repositório em destaque do GitHub com detalhes técnicos e contexto do projeto.",
+        screenshots: [],
+        featured: true,
+      };
+
+      saveFeaturedGithubProjects([
+        ...featuredGithubProjects,
+        newFeaturedProject,
+      ]);
+    },
+    updateFeaturedGithubProject: (
+      projectId: string,
+      updates: Partial<FeaturedGithubProject>,
+    ) => {
+      saveFeaturedGithubProjects(
+        featuredGithubProjects.map((project) =>
+          project.id === projectId ? { ...project, ...updates } : project,
+        ),
       );
     },
   };
