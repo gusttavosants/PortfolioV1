@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,10 +8,38 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, Trash2, Award, Folder, LogOut, Briefcase, FileText, Edit } from "lucide-react";
-import { Certificate, Project, Experience, TextContent } from "@/types/portfolio";
+import {
+  ArrowLeft,
+  Plus,
+  Trash2,
+  Award,
+  Folder,
+  LogOut,
+  Briefcase,
+  FileText,
+  Edit,
+} from "lucide-react";
+import {
+  Certificate,
+  Project,
+  Experience,
+  TextContent,
+} from "@/types/portfolio";
+
+const readFileAsDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Erro ao ler arquivo"));
+    reader.readAsDataURL(file);
+  });
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -26,20 +54,23 @@ const Admin = () => {
     updateCertificate,
     addProject,
     removeProject,
+    updateProject,
     addExperience,
     removeExperience,
     texts,
     updateTexts,
   } = usePortfolioData();
 
-  const [newCertificate, setNewCertificate] = useState<Omit<Certificate, "id">>({
-    title: "",
-    issuer: "",
-    date: "",
-    location: "",
-    credentialUrl: "",
-    image: "",
-  });
+  const [newCertificate, setNewCertificate] = useState<Omit<Certificate, "id">>(
+    {
+      title: "",
+      issuer: "",
+      date: "",
+      location: "",
+      credentialUrl: "",
+      image: "",
+    },
+  );
 
   const [newProject, setNewProject] = useState<Omit<Project, "id">>({
     title: "",
@@ -47,9 +78,13 @@ const Admin = () => {
     technologies: [],
     githubUrl: "",
     liveUrl: null,
+    coverImage: "",
+    longDescription: "",
+    screenshots: [],
   });
 
   const [techInput, setTechInput] = useState("");
+  const [projectScreenshotsInput, setProjectScreenshotsInput] = useState("");
 
   const [editableTexts, setEditableTexts] = useState<TextContent>(texts);
 
@@ -61,8 +96,13 @@ const Admin = () => {
     description: "",
   });
 
-  const [editingCertificate, setEditingCertificate] = useState<Certificate | null>(null);
+  const [editingCertificate, setEditingCertificate] =
+    useState<Certificate | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isProjectEditModalOpen, setIsProjectEditModalOpen] = useState(false);
+  const [editingProjectScreenshotsInput, setEditingProjectScreenshotsInput] =
+    useState("");
 
   const handleAddCertificate = () => {
     if (!newCertificate.title || !newCertificate.issuer) {
@@ -70,7 +110,14 @@ const Admin = () => {
       return;
     }
     addCertificate(newCertificate);
-    setNewCertificate({ title: "", issuer: "", date: "", location: "", credentialUrl: "", image: "" });
+    setNewCertificate({
+      title: "",
+      issuer: "",
+      date: "",
+      location: "",
+      credentialUrl: "",
+      image: "",
+    });
     toast.success("Certificado adicionado!");
   };
 
@@ -80,28 +127,52 @@ const Admin = () => {
       return;
     }
     addProject(newProject);
-    setNewProject({ title: "", description: "", technologies: [], githubUrl: "", liveUrl: null });
+    setNewProject({
+      title: "",
+      description: "",
+      technologies: [],
+      githubUrl: "",
+      liveUrl: null,
+      coverImage: "",
+      longDescription: "",
+      screenshots: [],
+    });
     setTechInput("");
+    setProjectScreenshotsInput("");
     toast.success("Projeto adicionado!");
   };
 
   const handleAddExperience = () => {
-    if (!newExperience.title || !newExperience.company || !newExperience.startDate) {
+    if (
+      !newExperience.title ||
+      !newExperience.company ||
+      !newExperience.startDate
+    ) {
       toast.error("Preencha pelo menos cargo, empresa e data de início.");
       return;
     }
     addExperience(newExperience);
-    setNewExperience({ title: "", company: "", startDate: "", endDate: "", description: "" });
+    setNewExperience({
+      title: "",
+      company: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+    });
     toast.success("Experiência adicionada!");
   };
 
-  const handleTextChange = (section: 'hero' | 'about', field: string, value: string) => {
-    setEditableTexts(prev => ({
+  const handleTextChange = (
+    section: "hero" | "about",
+    field: string,
+    value: string,
+  ) => {
+    setEditableTexts((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
         [field]: value,
-      }
+      },
     }));
   };
 
@@ -151,6 +222,104 @@ const Admin = () => {
     setEditingCertificate(null);
   };
 
+  const handleEditCertificateImageUpload = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const imageData = await readFileAsDataUrl(file);
+    setEditingCertificate((prev) =>
+      prev ? { ...prev, image: imageData } : null,
+    );
+  };
+
+  const handleEditProject = (project: Project) => {
+    setEditingProject(project);
+    setEditingProjectScreenshotsInput((project.screenshots || []).join(", "));
+    setIsProjectEditModalOpen(true);
+  };
+
+  const handleSaveProjectEdit = () => {
+    if (!editingProject) return;
+
+    if (!editingProject.title || !editingProject.description) {
+      toast.error("Preencha título e descrição do projeto");
+      return;
+    }
+
+    updateProject(editingProject.id, editingProject);
+    setIsProjectEditModalOpen(false);
+    setEditingProject(null);
+    setEditingProjectScreenshotsInput("");
+    toast.success("Projeto atualizado!");
+  };
+
+  const handleCancelProjectEdit = () => {
+    setIsProjectEditModalOpen(false);
+    setEditingProject(null);
+    setEditingProjectScreenshotsInput("");
+  };
+
+  const handleProjectCoverUpload = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const imageData = await readFileAsDataUrl(file);
+    setNewProject((prev) => ({ ...prev, coverImage: imageData }));
+  };
+
+  const handleProjectScreenshotsUpload = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const files = Array.from(event.target.files || []);
+
+    if (!files.length) return;
+
+    const uploadedImages = await Promise.all(files.map(readFileAsDataUrl));
+    setNewProject((prev) => ({
+      ...prev,
+      screenshots: [...(prev.screenshots || []), ...uploadedImages],
+    }));
+    setProjectScreenshotsInput("");
+  };
+
+  const handleEditProjectCoverUpload = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const imageData = await readFileAsDataUrl(file);
+    setEditingProject((prev) =>
+      prev ? { ...prev, coverImage: imageData } : null,
+    );
+  };
+
+  const handleEditProjectScreenshotsUpload = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const files = Array.from(event.target.files || []);
+
+    if (!files.length) return;
+
+    const uploadedImages = await Promise.all(files.map(readFileAsDataUrl));
+    setEditingProject((prev) =>
+      prev
+        ? {
+            ...prev,
+            screenshots: [...(prev.screenshots || []), ...uploadedImages],
+          }
+        : null,
+    );
+    setEditingProjectScreenshotsInput("");
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -186,7 +355,12 @@ const Admin = () => {
                 </p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={logout} className="gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={logout}
+              className="gap-2"
+            >
               <LogOut className="w-4 h-4" />
               Sair
             </Button>
@@ -216,7 +390,9 @@ const Admin = () => {
                 {/* Add Certificate Form */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Adicionar Certificado</CardTitle>
+                    <CardTitle className="text-lg">
+                      Adicionar Certificado
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
@@ -224,35 +400,50 @@ const Admin = () => {
                         placeholder="Título do certificado"
                         value={newCertificate.title}
                         onChange={(e) =>
-                          setNewCertificate((prev) => ({ ...prev, title: e.target.value }))
+                          setNewCertificate((prev) => ({
+                            ...prev,
+                            title: e.target.value,
+                          }))
                         }
                       />
                       <Input
                         placeholder="Emissor"
                         value={newCertificate.issuer}
                         onChange={(e) =>
-                          setNewCertificate((prev) => ({ ...prev, issuer: e.target.value }))
+                          setNewCertificate((prev) => ({
+                            ...prev,
+                            issuer: e.target.value,
+                          }))
                         }
                       />
                       <Input
                         placeholder="Data (ex: 2024)"
                         value={newCertificate.date}
                         onChange={(e) =>
-                          setNewCertificate((prev) => ({ ...prev, date: e.target.value }))
+                          setNewCertificate((prev) => ({
+                            ...prev,
+                            date: e.target.value,
+                          }))
                         }
                       />
                       <Input
                         placeholder="Local (ex: Alura, Udemy)"
                         value={newCertificate.location}
                         onChange={(e) =>
-                          setNewCertificate((prev) => ({ ...prev, location: e.target.value }))
+                          setNewCertificate((prev) => ({
+                            ...prev,
+                            location: e.target.value,
+                          }))
                         }
                       />
                       <Input
                         placeholder="URL da credencial"
                         value={newCertificate.credentialUrl}
                         onChange={(e) =>
-                          setNewCertificate((prev) => ({ ...prev, credentialUrl: e.target.value }))
+                          setNewCertificate((prev) => ({
+                            ...prev,
+                            credentialUrl: e.target.value,
+                          }))
                         }
                       />
                     </div>
@@ -260,10 +451,16 @@ const Admin = () => {
                       placeholder="URL da imagem"
                       value={newCertificate.image}
                       onChange={(e) =>
-                        setNewCertificate((prev) => ({ ...prev, image: e.target.value }))
+                        setNewCertificate((prev) => ({
+                          ...prev,
+                          image: e.target.value,
+                        }))
                       }
                     />
-                    <Button onClick={handleAddCertificate} className="w-full gap-2">
+                    <Button
+                      onClick={handleAddCertificate}
+                      className="w-full gap-2"
+                    >
                       <Plus className="w-4 h-4" />
                       Adicionar Certificado
                     </Button>
@@ -284,7 +481,9 @@ const Admin = () => {
                             />
                           )}
                           <div className="min-w-0">
-                            <h3 className="font-medium truncate">{cert.title}</h3>
+                            <h3 className="font-medium truncate">
+                              {cert.title}
+                            </h3>
                             <p className="text-sm text-muted-foreground truncate">
                               {cert.issuer} • {cert.location} • {cert.date}
                             </p>
@@ -317,7 +516,10 @@ const Admin = () => {
                 </div>
 
                 {/* Edit Certificate Modal */}
-                <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+                <Dialog
+                  open={isEditModalOpen}
+                  onOpenChange={setIsEditModalOpen}
+                >
                   <DialogContent className="max-w-2xl">
                     <DialogHeader>
                       <DialogTitle>Editar Certificado</DialogTitle>
@@ -330,7 +532,9 @@ const Admin = () => {
                             value={editingCertificate.title}
                             onChange={(e) =>
                               setEditingCertificate((prev) =>
-                                prev ? { ...prev, title: e.target.value } : null
+                                prev
+                                  ? { ...prev, title: e.target.value }
+                                  : null,
                               )
                             }
                           />
@@ -339,7 +543,9 @@ const Admin = () => {
                             value={editingCertificate.issuer}
                             onChange={(e) =>
                               setEditingCertificate((prev) =>
-                                prev ? { ...prev, issuer: e.target.value } : null
+                                prev
+                                  ? { ...prev, issuer: e.target.value }
+                                  : null,
                               )
                             }
                           />
@@ -348,7 +554,7 @@ const Admin = () => {
                             value={editingCertificate.date}
                             onChange={(e) =>
                               setEditingCertificate((prev) =>
-                                prev ? { ...prev, date: e.target.value } : null
+                                prev ? { ...prev, date: e.target.value } : null,
                               )
                             }
                           />
@@ -357,7 +563,9 @@ const Admin = () => {
                             value={editingCertificate.location}
                             onChange={(e) =>
                               setEditingCertificate((prev) =>
-                                prev ? { ...prev, location: e.target.value } : null
+                                prev
+                                  ? { ...prev, location: e.target.value }
+                                  : null,
                               )
                             }
                           />
@@ -366,7 +574,9 @@ const Admin = () => {
                             value={editingCertificate.credentialUrl}
                             onChange={(e) =>
                               setEditingCertificate((prev) =>
-                                prev ? { ...prev, credentialUrl: e.target.value } : null
+                                prev
+                                  ? { ...prev, credentialUrl: e.target.value }
+                                  : null,
                               )
                             }
                           />
@@ -376,10 +586,23 @@ const Admin = () => {
                           value={editingCertificate.image}
                           onChange={(e) =>
                             setEditingCertificate((prev) =>
-                              prev ? { ...prev, image: e.target.value } : null
+                              prev ? { ...prev, image: e.target.value } : null,
                             )
                           }
                         />
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <label className="text-sm text-muted-foreground">
+                              Anexar nova imagem
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleEditCertificateImageUpload}
+                              className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-medium"
+                            />
+                          </div>
+                        </div>
                         <div className="flex gap-2 justify-end">
                           <Button variant="outline" onClick={handleCancelEdit}>
                             Cancelar
@@ -406,14 +629,20 @@ const Admin = () => {
                       placeholder="Título do projeto"
                       value={newProject.title}
                       onChange={(e) =>
-                        setNewProject((prev) => ({ ...prev, title: e.target.value }))
+                        setNewProject((prev) => ({
+                          ...prev,
+                          title: e.target.value,
+                        }))
                       }
                     />
                     <Textarea
                       placeholder="Descrição"
                       value={newProject.description}
                       onChange={(e) =>
-                        setNewProject((prev) => ({ ...prev, description: e.target.value }))
+                        setNewProject((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
                       }
                     />
                     <div className="grid gap-4 md:grid-cols-2">
@@ -421,7 +650,10 @@ const Admin = () => {
                         placeholder="URL do GitHub"
                         value={newProject.githubUrl}
                         onChange={(e) =>
-                          setNewProject((prev) => ({ ...prev, githubUrl: e.target.value }))
+                          setNewProject((prev) => ({
+                            ...prev,
+                            githubUrl: e.target.value,
+                          }))
                         }
                       />
                       <Input
@@ -434,18 +666,91 @@ const Admin = () => {
                           }))
                         }
                       />
+                      <Input
+                        placeholder="URL da capa do projeto"
+                        value={newProject.coverImage || ""}
+                        onChange={(e) =>
+                          setNewProject((prev) => ({
+                            ...prev,
+                            coverImage: e.target.value,
+                          }))
+                        }
+                      />
                     </div>
 
-                    {/* Technologies */}
+                    <Textarea
+                      placeholder="Descrição longa da página do projeto"
+                      value={newProject.longDescription || ""}
+                      onChange={(e) =>
+                        setNewProject((prev) => ({
+                          ...prev,
+                          longDescription: e.target.value,
+                        }))
+                      }
+                    />
+
+                    <Textarea
+                      placeholder="URLs dos prints separadas por vírgula"
+                      value={projectScreenshotsInput}
+                      onChange={(e) => {
+                        setProjectScreenshotsInput(e.target.value);
+                        setNewProject((prev) => ({
+                          ...prev,
+                          screenshots: e.target.value
+                            .split(",")
+                            .map((item) => item.trim())
+                            .filter(Boolean),
+                        }));
+                      }}
+                    />
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <label className="text-sm text-muted-foreground">
+                          Anexar capa do projeto
+                        </label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleProjectCoverUpload}
+                          className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-medium"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm text-muted-foreground">
+                          Anexar prints do projeto
+                        </label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleProjectScreenshotsUpload}
+                          className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    {!!newProject.screenshots?.length && (
+                      <p className="text-xs text-muted-foreground">
+                        {newProject.screenshots.length} print(s) anexado(s)
+                      </p>
+                    )}
+
                     <div className="space-y-2">
                       <div className="flex gap-2">
                         <Input
                           placeholder="Adicionar tecnologia"
                           value={techInput}
                           onChange={(e) => setTechInput(e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTech())}
+                          onKeyDown={(e) =>
+                            e.key === "Enter" &&
+                            (e.preventDefault(), handleAddTech())
+                          }
                         />
-                        <Button type="button" variant="outline" onClick={handleAddTech}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleAddTech}
+                        >
                           <Plus className="w-4 h-4" />
                         </Button>
                       </div>
@@ -482,11 +787,29 @@ const Admin = () => {
                   {projects.map((project) => (
                     <Card key={project.id}>
                       <CardContent className="p-4 flex items-start justify-between gap-4">
+                        {project.coverImage && (
+                          <img
+                            src={project.coverImage}
+                            alt={project.title}
+                            className="h-20 w-28 shrink-0 rounded object-cover"
+                          />
+                        )}
                         <div className="min-w-0 flex-1">
                           <h3 className="font-medium">{project.title}</h3>
                           <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
                             {project.description}
                           </p>
+                          {project.longDescription && (
+                            <p className="text-xs text-muted-foreground line-clamp-2 mt-2">
+                              {project.longDescription}
+                            </p>
+                          )}
+                          {!!project.screenshots?.length && (
+                            <p className="text-xs text-muted-foreground mt-2">
+                              {project.screenshots.length} print(s)
+                              cadastrado(s)
+                            </p>
+                          )}
                           {project.technologies.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {project.technologies.map((tech) => (
@@ -500,21 +823,172 @@ const Admin = () => {
                             </div>
                           )}
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            removeProject(project.id);
-                            toast.success("Projeto removido");
-                          }}
-                          className="shrink-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex gap-2 shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditProject(project)}
+                            className="text-primary hover:text-primary"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              removeProject(project.id);
+                              toast.success("Projeto removido");
+                            }}
+                            className="shrink-0 text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
                 </div>
+
+                <Dialog
+                  open={isProjectEditModalOpen}
+                  onOpenChange={setIsProjectEditModalOpen}
+                >
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>Editar Projeto</DialogTitle>
+                    </DialogHeader>
+                    {editingProject && (
+                      <div className="space-y-4">
+                        <Input
+                          placeholder="Título do projeto"
+                          value={editingProject.title}
+                          onChange={(e) =>
+                            setEditingProject((prev) =>
+                              prev ? { ...prev, title: e.target.value } : null,
+                            )
+                          }
+                        />
+                        <Textarea
+                          placeholder="Descrição"
+                          value={editingProject.description}
+                          onChange={(e) =>
+                            setEditingProject((prev) =>
+                              prev
+                                ? { ...prev, description: e.target.value }
+                                : null,
+                            )
+                          }
+                        />
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <Input
+                            placeholder="URL do GitHub"
+                            value={editingProject.githubUrl}
+                            onChange={(e) =>
+                              setEditingProject((prev) =>
+                                prev
+                                  ? { ...prev, githubUrl: e.target.value }
+                                  : null,
+                              )
+                            }
+                          />
+                          <Input
+                            placeholder="URL do demo"
+                            value={editingProject.liveUrl || ""}
+                            onChange={(e) =>
+                              setEditingProject((prev) =>
+                                prev
+                                  ? { ...prev, liveUrl: e.target.value || null }
+                                  : null,
+                              )
+                            }
+                          />
+                          <Input
+                            placeholder="URL da capa"
+                            value={editingProject.coverImage || ""}
+                            onChange={(e) =>
+                              setEditingProject((prev) =>
+                                prev
+                                  ? { ...prev, coverImage: e.target.value }
+                                  : null,
+                              )
+                            }
+                          />
+                        </div>
+                        <Textarea
+                          placeholder="Descrição longa"
+                          value={editingProject.longDescription || ""}
+                          onChange={(e) =>
+                            setEditingProject((prev) =>
+                              prev
+                                ? { ...prev, longDescription: e.target.value }
+                                : null,
+                            )
+                          }
+                        />
+                        <Textarea
+                          placeholder="URLs dos prints separadas por vírgula"
+                          value={editingProjectScreenshotsInput}
+                          onChange={(e) => {
+                            setEditingProjectScreenshotsInput(e.target.value);
+                            setEditingProject((prev) =>
+                              prev
+                                ? {
+                                    ...prev,
+                                    screenshots: e.target.value
+                                      .split(",")
+                                      .map((item) => item.trim())
+                                      .filter(Boolean),
+                                  }
+                                : null,
+                            );
+                          }}
+                        />
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <label className="text-sm text-muted-foreground">
+                              Anexar nova capa
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleEditProjectCoverUpload}
+                              className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-medium"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm text-muted-foreground">
+                              Anexar novos prints
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={handleEditProjectScreenshotsUpload}
+                              className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-medium"
+                            />
+                          </div>
+                        </div>
+                        {!!editingProject.screenshots?.length && (
+                          <p className="text-xs text-muted-foreground">
+                            {editingProject.screenshots.length} print(s)
+                            anexado(s)
+                          </p>
+                        )}
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={handleCancelProjectEdit}
+                          >
+                            Cancelar
+                          </Button>
+                          <Button onClick={handleSaveProjectEdit}>
+                            Salvar Alterações
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </TabsContent>
 
               {/* Experiences Tab */}
@@ -522,37 +996,67 @@ const Admin = () => {
                 {/* Add Experience Form */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Adicionar Experiência</CardTitle>
+                    <CardTitle className="text-lg">
+                      Adicionar Experiência
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                       <Input
                         placeholder="Cargo"
                         value={newExperience.title}
-                        onChange={(e) => setNewExperience((prev) => ({ ...prev, title: e.target.value }))}
+                        onChange={(e) =>
+                          setNewExperience((prev) => ({
+                            ...prev,
+                            title: e.target.value,
+                          }))
+                        }
                       />
                       <Input
                         placeholder="Empresa"
                         value={newExperience.company}
-                        onChange={(e) => setNewExperience((prev) => ({ ...prev, company: e.target.value }))}
+                        onChange={(e) =>
+                          setNewExperience((prev) => ({
+                            ...prev,
+                            company: e.target.value,
+                          }))
+                        }
                       />
                       <Input
                         placeholder="Data de Início (ex: Jan 2022)"
                         value={newExperience.startDate}
-                        onChange={(e) => setNewExperience((prev) => ({ ...prev, startDate: e.target.value }))}
+                        onChange={(e) =>
+                          setNewExperience((prev) => ({
+                            ...prev,
+                            startDate: e.target.value,
+                          }))
+                        }
                       />
                       <Input
                         placeholder="Data de Término (ou 'Atual')"
-                        value={newExperience.endDate || ''}
-                        onChange={(e) => setNewExperience((prev) => ({ ...prev, endDate: e.target.value || null }))}
+                        value={newExperience.endDate || ""}
+                        onChange={(e) =>
+                          setNewExperience((prev) => ({
+                            ...prev,
+                            endDate: e.target.value || null,
+                          }))
+                        }
                       />
                     </div>
                     <Textarea
                       placeholder="Descrição das atividades"
                       value={newExperience.description}
-                      onChange={(e) => setNewExperience((prev) => ({ ...prev, description: e.target.value }))}
+                      onChange={(e) =>
+                        setNewExperience((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
                     />
-                    <Button onClick={handleAddExperience} className="w-full gap-2">
+                    <Button
+                      onClick={handleAddExperience}
+                      className="w-full gap-2"
+                    >
                       <Plus className="w-4 h-4" />
                       Adicionar Experiência
                     </Button>
@@ -567,7 +1071,8 @@ const Admin = () => {
                         <div className="min-w-0 flex-1">
                           <h3 className="font-medium">{exp.title}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {exp.company} • {exp.startDate} - {exp.endDate || 'Atual'}
+                            {exp.company} • {exp.startDate} -{" "}
+                            {exp.endDate || "Atual"}
                           </p>
                           <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
                             {exp.description}
@@ -594,7 +1099,9 @@ const Admin = () => {
               <TabsContent value="texts" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Editar Textos da Página</CardTitle>
+                    <CardTitle className="text-lg">
+                      Editar Textos da Página
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-4 rounded-md border p-4">
@@ -602,44 +1109,65 @@ const Admin = () => {
                       <Input
                         placeholder="Título Principal"
                         value={editableTexts.hero.title}
-                        onChange={(e) => handleTextChange('hero', 'title', e.target.value)}
+                        onChange={(e) =>
+                          handleTextChange("hero", "title", e.target.value)
+                        }
                       />
                       <Textarea
                         placeholder="Subtítulo"
                         value={editableTexts.hero.subtitle}
-                        onChange={(e) => handleTextChange('hero', 'subtitle', e.target.value)}
+                        onChange={(e) =>
+                          handleTextChange("hero", "subtitle", e.target.value)
+                        }
                       />
-                       <Input
+                      <Input
                         placeholder="Texto do Botão (CTA)"
                         value={editableTexts.hero.cta}
-                        onChange={(e) => handleTextChange('hero', 'cta', e.target.value)}
+                        onChange={(e) =>
+                          handleTextChange("hero", "cta", e.target.value)
+                        }
                       />
                     </div>
 
                     <div className="space-y-4 rounded-md border p-4">
                       <h3 className="font-medium">Seção Sobre</h3>
-                       <Input
+                      <Input
                         placeholder="Título da Seção Sobre"
                         value={editableTexts.about.title}
-                        onChange={(e) => handleTextChange('about', 'title', e.target.value)}
+                        onChange={(e) =>
+                          handleTextChange("about", "title", e.target.value)
+                        }
                       />
                       <Textarea
                         placeholder="Primeiro Parágrafo"
                         value={editableTexts.about.paragraph1}
-                        onChange={(e) => handleTextChange('about', 'paragraph1', e.target.value)}
+                        onChange={(e) =>
+                          handleTextChange(
+                            "about",
+                            "paragraph1",
+                            e.target.value,
+                          )
+                        }
                       />
                       <Textarea
                         placeholder="Segundo Parágrafo"
                         value={editableTexts.about.paragraph2}
-                        onChange={(e) => handleTextChange('about', 'paragraph2', e.target.value)}
+                        onChange={(e) =>
+                          handleTextChange(
+                            "about",
+                            "paragraph2",
+                            e.target.value,
+                          )
+                        }
                       />
                     </div>
 
-                    <Button onClick={handleSaveTexts} className="w-full">Salvar Textos</Button>
+                    <Button onClick={handleSaveTexts} className="w-full">
+                      Salvar Textos
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
-
             </Tabs>
           </div>
         </div>
