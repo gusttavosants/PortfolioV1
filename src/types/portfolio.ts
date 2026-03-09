@@ -38,4 +38,20 @@ export interface Project {
   technologies: string[];
   githubUrl: string;
   liveUrl: string | null;
+  coverImage?: string;
+  longDescription?: string;
+  screenshots?: string[];
+  featured?: boolean;
+  source?: "manual" | "github";
+}
+
+export interface FeaturedGithubProject {
+  id: string;
+  repoName: string;
+  title: string;
+  description: string;
+  coverImage?: string;
+  longDescription: string;
+  screenshots: string[];
+  featured: boolean;
 }
