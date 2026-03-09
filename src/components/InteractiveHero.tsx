@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Code2, Database, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const InteractiveHero = () => {
   const topSkills = [
@@ -120,24 +121,26 @@ const InteractiveHero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <motion.a
-              href="/contact"
-              className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span>Let's Talk</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </motion.a>
+            <Link to="/contact">
+              <motion.div
+                className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span>Let's Talk</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </motion.div>
+            </Link>
 
-            <motion.a
-              href="/projects"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-medium border border-white/20 hover:bg-white/5 transition-all"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span>View Projects</span>
-            </motion.a>
+            <Link to="/projects">
+              <motion.div
+                className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-medium border border-white/20 hover:bg-white/5 transition-all cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span>View Projects</span>
+              </motion.div>
+            </Link>
           </motion.div>
 
           {/* Scroll Indicator */}
