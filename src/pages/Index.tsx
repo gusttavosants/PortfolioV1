@@ -1,40 +1,27 @@
 import { Helmet } from "react-helmet-async";
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import AboutSection from "@/components/AboutSection";
-import CertificatesSection from "@/components/CertificatesSection";
-import ProjectsSection from "@/components/ProjectsSection";
-import { useLocation } from "react-router-dom";
-import ContactSection from "@/components/ContactSection";
-import ExperienceSection from "@/components/ExperienceSection";
+import InteractiveHero from "@/components/InteractiveHero";
 import Footer from "@/components/Footer";
+import AnimatedMenu from "@/components/AnimatedMenu";
 
 const Index = () => {
-  const location = useLocation();
-  const showCv = new URLSearchParams(location.search).get("cv") === "true";
   return (
     <>
       <Helmet>
-        <title>Portfolio | Desenvolvedor Backend</title>
+        <title>Home | Gustavo Melo</title>
         <meta
           name="description"
-          content="Portfolio de desenvolvedor backend especializado em APIs, bancos de dados e arquitetura de software. Node.js, Python, Java, PostgreSQL, Docker e AWS."
+          content="Backend Software Engineer especializado em Python, Node.js e NestJS. Desenvolvedor de soluções robustas e escaláveis."
         />
         <meta
           name="keywords"
-          content="desenvolvedor backend, backend developer, API, Node.js, Python, Java, PostgreSQL, Docker, AWS"
+          content="backend developer, software engineer, python, nodejs, nestjs, typescript, API, web development"
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
-        <Navbar />
+      <div className="min-h-screen bg-black">
+        <AnimatedMenu />
         <main>
-          <HeroSection />
-          <AboutSection />
-          <ExperienceSection />
-          <CertificatesSection />
-          <ProjectsSection />
-          <ContactSection />
+          <InteractiveHero />
         </main>
         <Footer />
       </div>
